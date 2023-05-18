@@ -27,12 +27,15 @@ namespace ChatApp
 
             listPanel[0].Visible = true;
             listPanel[1].Visible = false;
+            ClientSocket clientSocket = ClientSocket.Instance;
         }
 
 
 
         private void SignInButton_Click(object sender, EventArgs e)
         {
+            ClientSocket.Instance.SendMessage(EmailTextBox.Text + " " + PasswordTextBox.Text);
+
             ChatForm chatForm = new ChatForm();
             this.Hide();
             chatForm.ShowDialog();
@@ -50,5 +53,6 @@ namespace ChatApp
             listPanel[0].Visible = true;
             listPanel[1].Visible = false;
         }
+
     }
 }
