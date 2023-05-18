@@ -60,8 +60,8 @@ namespace ChatApp
 
         public void SendMessage(String message)
         {
-            byte[] msg = Encoding.ASCII.GetBytes(message);
-            int bytesSent = sender.Send(msg);
+            //byte[] msg = Encoding.ASCII.GetBytes(message);
+            //int bytesSent = sender.Send(msg);
         }
         public String ReceiveMessage()
         {

@@ -195,7 +195,7 @@ namespace ChatApp
             this.RegistrationPanel.Controls.Add(this.pictureBox2);
             this.RegistrationPanel.Location = new System.Drawing.Point(-3, -2);
             this.RegistrationPanel.Name = "RegistrationPanel";
-            this.RegistrationPanel.Size = new System.Drawing.Size(516, 426);
+            this.RegistrationPanel.Size = new System.Drawing.Size(517, 426);
             this.RegistrationPanel.TabIndex = 19;
             // 
             // label2
@@ -215,7 +215,7 @@ namespace ChatApp
             this.SignUpButton.BackColor = System.Drawing.Color.Black;
             this.SignUpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignUpButton.ForeColor = System.Drawing.Color.Silver;
-            this.SignUpButton.Location = new System.Drawing.Point(213, 339);
+            this.SignUpButton.Location = new System.Drawing.Point(223, 340);
             this.SignUpButton.Margin = new System.Windows.Forms.Padding(2);
             this.SignUpButton.Name = "SignUpButton";
             this.SignUpButton.Size = new System.Drawing.Size(72, 35);
