@@ -15,6 +15,20 @@ namespace ChatApp
         public ChatForm()
         {
             InitializeComponent();
+            this.CenterToScreen();
+        }
+
+        private void LogoutButton_Click(object sender, EventArgs e)
+        {
+            LogInForm loginForm = new LogInForm();
+            this.Hide();
+            loginForm.ShowDialog();
+            this.Close();
+        }
+
+        private void SettingsPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

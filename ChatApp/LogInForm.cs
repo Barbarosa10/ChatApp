@@ -12,9 +12,43 @@ namespace ChatApp
 {
     public partial class LogInForm : Form
     {
+        List<Panel> listPanel = new List<Panel>();
+        int index = 0;
         public LogInForm()
         {
             InitializeComponent();
+        }
+
+        private void LogInForm_Load(object sender, EventArgs e)
+        {
+            this.CenterToScreen();
+            listPanel.Add(LoginPanel);
+            listPanel.Add(RegistrationPanel);
+
+            listPanel[0].Visible = true;
+            listPanel[1].Visible = false;
+        }
+
+
+
+        private void SignInButton_Click(object sender, EventArgs e)
+        {
+            ChatForm chatForm = new ChatForm();
+            this.Hide();
+            chatForm.ShowDialog();
+            this.Close();
+        }
+
+        private void RegisterButton_Click(object sender, EventArgs e)
+        {
+            listPanel[1].Visible = true;
+            listPanel[0].Visible = false;
+        }
+
+        private void SignUpButton_Click(object sender, EventArgs e)
+        {
+            listPanel[0].Visible = true;
+            listPanel[1].Visible = false;
         }
     }
 }

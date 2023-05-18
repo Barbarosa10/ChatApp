@@ -7,3 +7,5 @@ C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.csproj.GenerateR
 C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.csproj.CoreCompileInputs.cache
 C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.exe
 C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.pdb
+C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.LogInForm.resources
+C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.ChatForm.resources
