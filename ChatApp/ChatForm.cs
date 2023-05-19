@@ -19,6 +19,24 @@ namespace ChatApp
             InitializeComponent();
             this.CenterToScreen();
 
+            ProfileButton.FlatStyle = FlatStyle.Flat;
+            ProfileButton.FlatAppearance.BorderSize = 0;
+
+            ContactsButton.FlatStyle = FlatStyle.Flat;
+            ContactsButton.FlatAppearance.BorderSize = 0;
+
+            ConversationButton.FlatStyle = FlatStyle.Flat;
+            ConversationButton.FlatAppearance.BorderSize = 0;
+
+            SettingsButton.FlatStyle = FlatStyle.Flat;
+            SettingsButton.FlatAppearance.BorderSize = 0;
+
+            LogoutButton.FlatStyle = FlatStyle.Flat;
+            LogoutButton.FlatAppearance.BorderSize = 0;
+
+            LoadAvatarButton.FlatStyle = FlatStyle.Flat;
+            LoadAvatarButton.FlatAppearance.BorderSize = 0;
+
             listPanelRight.Add(ProfilePanel);
             listPanelRight.Add(ContactsPanel);
             listPanelRight.Add(ConversationPanel);
@@ -28,6 +46,9 @@ namespace ChatApp
             listPanelMid.Add(ContactsSidePanel);
             listPanelMid.Add(ConversationsSidePanel);
             listPanelMid.Add(SettingsSidePanel);
+
+            ProfileButton.BackColor = Color.DarkGray;
+            ProfileButton.ForeColor = Color.Black;
 
             listPanelRight[0].Visible = true;
             listPanelRight[1].Visible = false;
@@ -60,22 +81,17 @@ namespace ChatApp
  
         }
 
-        private void LoadAvatarButton_Click(object sender, EventArgs e)
-        {
-            // open file dialog   
-            OpenFileDialog open = new OpenFileDialog();
-            // image filters  
-            open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
-            if (open.ShowDialog() == DialogResult.OK)
-            {
-                // display image in picture box  
-                AvatarPictureBox.Image = new Bitmap(open.FileName);
-
-            }
-        }
-
         private void ProfileButton_Click(object sender, EventArgs e)
         {
+            ProfileButton.BackColor = Color.DarkGray;
+            ProfileButton.ForeColor = Color.Black;
+            ContactsButton.BackColor = Color.Black;
+            ContactsButton.ForeColor = Color.Silver;
+            ConversationButton.BackColor = Color.Black;
+            ConversationButton.ForeColor = Color.Silver;
+            SettingsButton.BackColor = Color.Black;
+            SettingsButton.ForeColor = Color.Silver;
+
             listPanelRight[0].Visible = true;
             listPanelRight[1].Visible = false;
             listPanelRight[2].Visible = false;
@@ -89,6 +105,15 @@ namespace ChatApp
 
         private void ContactsButton_Click(object sender, EventArgs e)
         {
+            ProfileButton.BackColor = Color.Black;
+            ProfileButton.ForeColor = Color.Silver;
+            ContactsButton.BackColor = Color.DarkGray;
+            ContactsButton.ForeColor = Color.Black;
+            ConversationButton.BackColor = Color.Black;
+            ConversationButton.ForeColor = Color.Silver;
+            SettingsButton.BackColor = Color.Black;
+            SettingsButton.ForeColor = Color.Silver;
+
             listPanelRight[0].Visible = false;
             listPanelRight[1].Visible = true;
             listPanelRight[2].Visible = false;
@@ -98,10 +123,20 @@ namespace ChatApp
             listPanelMid[1].Visible = true;
             listPanelMid[2].Visible = false;
             listPanelMid[3].Visible = false;
+
         }
 
         private void ConversationButton_Click(object sender, EventArgs e)
         {
+            ProfileButton.BackColor = Color.Black;
+            ProfileButton.ForeColor = Color.Silver;
+            ContactsButton.BackColor = Color.Black;
+            ContactsButton.ForeColor = Color.Silver;
+            ConversationButton.BackColor = Color.DarkGray;
+            ConversationButton.ForeColor = Color.Black;
+            SettingsButton.BackColor = Color.Black;
+            SettingsButton.ForeColor = Color.Silver;
+
             listPanelRight[0].Visible = false;
             listPanelRight[1].Visible = false;
             listPanelRight[2].Visible = true;
@@ -115,6 +150,15 @@ namespace ChatApp
 
         private void SettingsButton_Click(object sender, EventArgs e)
         {
+            ProfileButton.BackColor = Color.Black;
+            ProfileButton.ForeColor = Color.Silver;
+            ContactsButton.BackColor = Color.Black;
+            ContactsButton.ForeColor = Color.Silver;
+            ConversationButton.BackColor = Color.Black;
+            ConversationButton.ForeColor = Color.Silver;
+            SettingsButton.BackColor = Color.DarkGray;
+            SettingsButton.ForeColor = Color.Black;
+
             listPanelRight[0].Visible = false;
             listPanelRight[1].Visible = false;
             listPanelRight[2].Visible = false;
@@ -125,5 +169,20 @@ namespace ChatApp
             listPanelMid[2].Visible = false;
             listPanelMid[3].Visible = true;
         }
+
+        private void LoadAvatarButton_Click_1(object sender, EventArgs e)
+        {
+            // open file dialog   
+            OpenFileDialog open = new OpenFileDialog();
+            // image filters  
+            open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
+            if (open.ShowDialog() == DialogResult.OK)
+            {
+                // display image in picture box  
+                AvatarPictureBoxProfile.Image = new Bitmap(open.FileName);
+                AvatarPictureBoxSettings.Image = new Bitmap(open.FileName);
+            }
+        }
+
     }
 }
