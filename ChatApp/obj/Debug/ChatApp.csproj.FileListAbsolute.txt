@@ -9,3 +9,14 @@ C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.exe
 C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.pdb
 C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.LogInForm.resources
 C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.ChatForm.resources
+C:\Users\flare\source\repos\ChatApp\ChatApp\bin\Debug\ChatApp.exe.config
+C:\Users\flare\source\repos\ChatApp\ChatApp\bin\Debug\ChatApp.exe
+C:\Users\flare\source\repos\ChatApp\ChatApp\bin\Debug\ChatApp.pdb
+C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.csproj.AssemblyReference.cache
+C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.ChatForm.resources
+C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.LogInForm.resources
+C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.Properties.Resources.resources
+C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.csproj.GenerateResource.cache
+C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.csproj.CoreCompileInputs.cache
+C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.exe
+C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.pdb
