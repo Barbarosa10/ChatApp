@@ -69,7 +69,7 @@ namespace ChatApp
             this.LoginPanel.Controls.Add(this.label5);
             this.LoginPanel.Controls.Add(this.label4);
             this.LoginPanel.Controls.Add(this.label3);
-            this.LoginPanel.Location = new System.Drawing.Point(-2, -1);
+            this.LoginPanel.Location = new System.Drawing.Point(0, 0);
             this.LoginPanel.Name = "LoginPanel";
             this.LoginPanel.Size = new System.Drawing.Size(516, 426);
             this.LoginPanel.TabIndex = 0;
@@ -315,8 +315,8 @@ namespace ChatApp
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(514, 424);
-            this.Controls.Add(this.RegistrationPanel);
             this.Controls.Add(this.LoginPanel);
+            this.Controls.Add(this.RegistrationPanel);
             this.Name = "LogInForm";
             this.Text = "LogIn";
             this.Load += new System.EventHandler(this.LogInForm_Load);

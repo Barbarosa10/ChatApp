@@ -76,8 +76,8 @@ namespace ChatApp
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            RsaEncryption rsa = new RsaEncryption();
-            ClientSocket.Instance.SendMessage(rsa.GetPublicPEM());
+            //RsaEncryption rsa = new RsaEncryption();
+            //ClientSocket.Instance.SendMessage(rsa.ExportPublicKey());
  
         }
 

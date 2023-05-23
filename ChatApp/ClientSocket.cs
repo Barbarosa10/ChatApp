@@ -10,8 +10,11 @@ namespace ChatApp
 {
     class ClientSocket
     {
+        private string IPAddress = "127.0.0.1"; //146.190.44.233
         private static ClientSocket instance = null;
         private Socket sender;
+        private ClearComms _clearProxy;
+        private EncComms _encProxy;
         private ClientSocket()
         {
             StartClient();
@@ -30,7 +33,7 @@ namespace ChatApp
         private  void StartClient()
         {
 
-            IPAddress remoteIPAddress = System.Net.IPAddress.Parse("146.190.44.233");
+            IPAddress remoteIPAddress = System.Net.IPAddress.Parse(IPAddress);
             IPEndPoint remoteEP = new IPEndPoint(remoteIPAddress, 1234);
 
             sender = new Socket(AddressFamily.InterNetwork,
@@ -42,7 +45,12 @@ namespace ChatApp
 
                 Console.WriteLine("Socket connected to {0}",
                     sender.RemoteEndPoint.ToString());
-
+                _clearProxy = new ClearComms(sender);
+                _encProxy = new EncComms(sender);
+                RsaEncryption rsa = new RsaEncryption();
+                _clearProxy.Send(Encoding.UTF8.GetBytes(rsa.ExportPublicKey()));
+                byte[] aesKey = rsa.RSADecrypt(_clearProxy.Recv(128), false);
+                _encProxy.setKey(aesKey);
             }
             catch(ArgumentNullException e)
             {
@@ -58,8 +66,9 @@ namespace ChatApp
             }
         }
 
-        public void SendMessage(String message)
+        public void SendMessage(IPacket message)
         {
+            _encProxy.Send(message.serialize());
             //byte[] msg = Encoding.ASCII.GetBytes(message);
             //int bytesSent = sender.Send(msg);
         }

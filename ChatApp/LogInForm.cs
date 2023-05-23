@@ -34,7 +34,7 @@ namespace ChatApp
 
         private void SignInButton_Click(object sender, EventArgs e)
         {
-            ClientSocket.Instance.SendMessage(EmailTextBox.Text + " " + PasswordTextBox.Text);
+            ClientSocket.Instance.SendMessage(new LoginPacket(EmailTextBox.Text,PasswordTextBox.Text));
 
             ChatForm chatForm = new ChatForm();
             this.Hide();
