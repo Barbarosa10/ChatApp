@@ -3,14 +3,13 @@ from hashlib import sha256
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.errors import DuplicateKeyError
-from comm import Message
+from comm import *
 from multiprocessing.pool import ThreadPool
 import sys
 import rsa
 import logging
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
 from time import time
+import traceback
 
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
@@ -44,25 +43,28 @@ class Client:
         users_list[self.username] = self
     
     def send(self, msg:Message) -> None:
-        cipher = AES.new(self.key, AES.MODE_GCM)
-        ciphertext = cipher.encrypt(msg.get_raw())
-        self.con.sendall(cipher.nonce+ciphertext)
+        data = encrypt_and_serialize(msg, self.key)
+        self.con.sendall(data)
     
     def recv(self) -> Message:
-        enc = self.con.recv(1024)
-        while len(enc) == 0:
-            enc = self.con.recv(1024)
-        nonce = enc[:16]
-        cipher = AES.new(self.key, AES.MODE_GCM, nonce=nonce)
-        dec = cipher.decrypt(enc[16:])
-        return dec
+        size = self.con.recv(2)
+        while len(size) == 0:
+            size = self.con.recv(2)
+        size = struct.unpack("<H", size)[0]
+        enc = self.con.recv(size)
+        return decrypt(enc, self.key)
 
     def get_con(self) -> socket.socket:
         return self.con
 
     def init(self):
-        pub_key = rsa.PublicKey.load_pkcs1(self.con.recv(1024))
+        print("MADE IT")
+        data = self.con.recv(1024)
+        print(data)
+        pub_key = rsa.PublicKey.load_pkcs1_openssl_pem(data)
+        print(pub_key)
         self.key = get_random_bytes(16)
+        logging.info(f"AES KEY: {self.key.hex()}")
         self.con.sendall(rsa.encrypt(self.key, pub_key))
 
 
@@ -102,20 +104,15 @@ def client_handler(conn):
     client.init()
     while True:
         try:
-            data = client.recv()
-            msg = Message().from_bytes(data)
+            msg = client.recv()
             to_send : Message = None
 
-            if msg.get_size() > 1024:
-                data += conn.recv(msg.get_size()-1024)
-                msg = Message().from_bytes(data)
-
-            elif msg.get_msg_type() == "LOGIN":
+            if msg.get_msg_type() == "LOGIN":
                 user, password = msg.get_user_and_pass()
                 logging.info(f"{user} is trying to log in...")
                 if(login(user, password)):
                     client.login(user)
-                    to_send = Message("LOGIN")
+                    to_send = Message("LOGIN_ACK")
                     to_send.set_ack_msg("OK")
                 else:
                     logging.warning(f"{user} didn't get the right password")
@@ -126,6 +123,8 @@ def client_handler(conn):
                 user, password = msg.get_user_and_pass()
                 if(register(user, password) == user):
                     logging.info(f"{user} registered.")
+                    to_send = Message("REGISTER_ACK")
+                    to_send.set_ack_msg("OK")
                 else:
                     logging.warning(f"{user} tried to register again.")
                     to_send = Message("ERROR")
@@ -141,16 +140,14 @@ def client_handler(conn):
                 else:
                     logging.info(f"Cannot send message to unlogged user {dest_id}")
 
+
             client.send(to_send)
         except Exception as e:
+            traceback.print_exc()
             logging.error(e)
             break
 
 def main():
-    #global PRIVATE_KEY, PUBLIC_KEY
-    #generateKeys()
-    #PRIVATE_KEY, PUBLIC_KEY = loadKeys()
-
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((SERVER_IP, SERVER_PORT))

@@ -69,7 +69,7 @@ namespace ChatApp
             this.LoginPanel.Controls.Add(this.label5);
             this.LoginPanel.Controls.Add(this.label4);
             this.LoginPanel.Controls.Add(this.label3);
-            this.LoginPanel.Location = new System.Drawing.Point(-2, -1);
+            this.LoginPanel.Location = new System.Drawing.Point(0, 0);
             this.LoginPanel.Name = "LoginPanel";
             this.LoginPanel.Size = new System.Drawing.Size(516, 426);
             this.LoginPanel.TabIndex = 0;
