@@ -16,6 +16,7 @@ namespace ChatApp
         List<Panel> listPanelMid = new List<Panel>();
         List<Panel> listPanelRight = new List<Panel>();
         Chat chat = new Chat();
+        Contact logged_user;
         public ChatForm(Contact user)
         {
             InitializeComponent();
@@ -26,6 +27,7 @@ namespace ChatApp
 
             AvatarPictureBoxProfile.Image = user.Image;
             AvatarPictureBoxSettings.Image = user.Image;
+            logged_user = user;
 
             listPanelRight.Add(ProfilePanel);
             listPanelRight.Add(ContactsPanel);
@@ -288,6 +290,13 @@ namespace ChatApp
                 AvatarPictureBoxProfile.Image = new Bitmap(open.FileName);
                 AvatarPictureBoxSettings.Image = new Bitmap(open.FileName);
             }
+            byte[] img;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                logged_user.Image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                img = stream.ToArray();
+            }
+            ClientSocket.Instance.SendMessage(new UploadPhotoPacket(logged_user.Name, img));
         }
 
         private void AddContactsPanel_Paint(object sender, PaintEventArgs e)
@@ -307,6 +316,7 @@ namespace ChatApp
 
         private void InsertContactButton_Click(object sender, EventArgs e)
         {
+            ClientSocket.Instance.SendMessage(new RetrieveContactPacket(ContactToAddTextBox.Text));
             //chat.ContactToAddTextBox.Text;
         }
     }

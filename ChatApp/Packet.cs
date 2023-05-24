@@ -83,7 +83,7 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
-            Message = Encoding.UTF8.GetString(data);
+            Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
         public byte[] serialize()
@@ -115,6 +115,7 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
+
             int username_len = Array.IndexOf(data, 0);
             byte[] username = new byte[username_len - 1];
             Array.Copy(data, 1, username, 0, username_len);
@@ -155,7 +156,7 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
-            Message = Encoding.UTF8.GetString(data);
+            Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
         public byte[] serialize()
@@ -198,20 +199,19 @@ namespace ChatApp
         }
         public void execute(ChatForm chatForm)
         {
-            return;
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 
-    class RetreiveContactPacket : IPacket
+    class RetrieveContactPacket : IPacket
     {
         public string Username { get; set; }
-        public RetreiveContactPacket(string username)
+        public RetrieveContactPacket(string username)
         {
             Username = username;
         }
 
-        public RetreiveContactPacket() { }
+        public RetrieveContactPacket() { }
 
         public void deserialize(byte[] data)
         {
@@ -279,7 +279,7 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
-            Message = Encoding.UTF8.GetString(data);
+            Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
         public byte[] serialize()

@@ -36,11 +36,17 @@ namespace ChatApp
         private void SignInButton_Click(object sender, EventArgs e)
         {
             ClientSocket.Instance.SendMessage(new LoginPacket(UserTextBox.Text,PasswordTextBox.Text));
-
-            ChatForm chatForm = new ChatForm(new Contact(UserTextBox.Text));
-            this.Hide();
-            chatForm.ShowDialog();
-            this.Close();
+            LoginAckPacket p = (LoginAckPacket)ClientSocket.Instance.ReceiveMessage();
+            if (!p.Message.Equals("OK"))
+            {
+                MessageBox.Show(p.Message);
+            }
+            else { 
+                ChatForm chatForm = new ChatForm(new Contact(UserTextBox.Text));
+                this.Hide();
+                chatForm.ShowDialog();
+                this.Close();
+            }
         }
 
         private void RegisterButton_Click(object sender, EventArgs e)
@@ -53,6 +59,16 @@ namespace ChatApp
         {
             listPanel[0].Visible = true;
             listPanel[1].Visible = false;
+            ClientSocket.Instance.SendMessage(new RegisterPacket(RegisterUsername.Text, RegisterPassword.Text));
+            RegisterAckPacket p = (RegisterAckPacket)ClientSocket.Instance.ReceiveMessage();
+
+            IPacket mesaj = ClientSocket.Instance.ReceiveMessage();
+            mesaj.execute(this);
+            
+            if (!p.Message.Equals("OK"))
+            {
+                MessageBox.Show(p.Message);
+            }
         }
 
     }

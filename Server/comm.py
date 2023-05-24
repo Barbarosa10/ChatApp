@@ -76,15 +76,18 @@ class Message:
         return self.raw
 
 def encrypt_and_serialize(msg:Message, key:bytes) -> bytes:
-    cipher = AES.new(key, AES.MODE_GCM)
-    ciphertext = cipher.encrypt(msg.get_raw())
-    enc_data = cipher.nonce+ciphertext
-    size = struct.pack(">H", len(enc_data))
-    packet = size + enc_data
+    nonce = get_random_bytes(12)
+    cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+
+    ciphertext, tag = cipher.encrypt_and_digest(msg.get_raw())
+    enc_data = cipher.nonce+ciphertext+tag
+    tmp = len(enc_data)
+    size = bytes([tmp&0xff]) + bytes([(tmp>>8)&0xff]) + bytes([(tmp>>16)&0xff])
+    packet = size + enc_data 
+    print(f"TAG: {tag.hex()}\nIV: {cipher.nonce.hex()}\nCipher: {ciphertext.hex()}")
     return packet
 
 def decrypt(msg:bytes, key:bytes) -> Message:
-    print(msg.hex())
     nonce = msg[:12]
     cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
     dec = cipher.decrypt_and_verify(msg[12:-16], msg[-16:])

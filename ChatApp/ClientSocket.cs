@@ -71,16 +71,31 @@ namespace ChatApp
             _encProxy.Send(message.serialize());
         }
 
-       /* public IPacket ReceiveMessage()
+        public IPacket ReceiveMessage()
         {
-            int size = Convert.ToInt32(_clearProxy.Recv(2));
+            byte[] size_arr = _clearProxy.Recv(3);
+            int size = (int)size_arr[0] + ((int)(size_arr[1]) << 8) + ((int)(size_arr[2]) << 16);
             byte[] data = _encProxy.Recv(size);
-            switch(data[0])
+            IPacket packet;
+            switch((PacketType)data[0])
             {
                 case PacketType.LOGIN_ACK:
+                    packet = new LoginAckPacket();
                     break;
+                case PacketType.REGISTER_ACK:
+                    packet = new RegisterAckPacket();
+                    break;
+                case PacketType.RETREIVE_ACK:
+                    packet = new RetreiveContactAckPacket();
+                    break;
+                case PacketType.UPLOAD_PHOTO_ACK:
+                    packet = new UploadPhotoAckPacket();
+                    break;
+                default:
+                    throw new Exception("Auleu ca nu stiu ce pachet ea asta");
             }
-            return Encoding.ASCII.GetString(bytes, 0, bytesRec);
-        }*/
+            packet.deserialize(data);
+            return packet;
+        }
     }
 }

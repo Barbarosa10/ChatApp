@@ -10,6 +10,7 @@ import rsa
 import logging
 from time import time
 import traceback
+from bson.binary import Binary
 
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
@@ -47,10 +48,10 @@ class Client:
         self.con.sendall(data)
     
     def recv(self) -> Message:
-        size = self.con.recv(2)
+        size = self.con.recv(3)
         while len(size) == 0:
-            size = self.con.recv(2)
-        size = struct.unpack("<H", size)[0]
+            size = self.con.recv(3)
+        size = int(size[0]) + int(size[1]<<8) + int(size[2]<<16)
         enc = self.con.recv(size)
         return decrypt(enc, self.key)
 
@@ -80,7 +81,7 @@ def register(user:str, password:str) -> str:
     users = db.users
     hashed_password = sha256(password.encode("utf-8")).hexdigest()
     try:
-        if(users.insert_one({"username":user, "password":hashed_password, "profile_picture":b''}).inserted_id):
+        if(users.insert_one({"username":user, "password":hashed_password, "profile_picture":Binary(b'')}).inserted_id):
             return user
     except DuplicateKeyError:
         return ""
@@ -108,7 +109,7 @@ def get_contact_profile(username: bytes) -> bytes:
     return user.profile_picture
 
 def upload_photo_to_profile(username: bytes, photo:bytes):
-    db.users.update_one({"username":username.decode("utf-8")}, {"$set": {"profile_picture":photo}})
+    db.users.update_one({"username":username.decode("utf-8")}, {"$set": {"profile_picture":Binary(photo)}})
 
 
 def client_handler(conn):
@@ -171,7 +172,9 @@ def client_handler(conn):
 
             elif msg.get_msg_type() == "UPLOAD_PROFILE_PHOTO":
                 username, pict = msg.get_username_and_picture()
-                to_send = Message("RETRIEVE_CONTACT_ACK")
+                logging.info(f"User {client.username} is uploading picture")
+                upload_photo_to_profile(username, pict)
+                to_send = Message("UPLOAD_PROFILE_ACK")
                 to_send.set_ack_msg("OK")
                 
 
