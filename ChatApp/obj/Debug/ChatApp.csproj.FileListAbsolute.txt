@@ -23,3 +23,6 @@ C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.pdb
 C:\Users\flare\source\repos\ChatApp\ChatApp\bin\Debug\BouncyCastle.Cryptography.dll
 C:\Users\flare\source\repos\ChatApp\ChatApp\bin\Debug\BouncyCastle.Cryptography.xml
 C:\Users\flare\source\repos\ChatApp\ChatApp\obj\Debug\ChatApp.csproj.CopyComplete
+C:\Users\duciu\Desktop\ChatAppProject\ChatApp\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\duciu\Desktop\ChatAppProject\ChatApp\bin\Debug\BouncyCastle.Crypto.xml
+C:\Users\duciu\Desktop\ChatAppProject\ChatApp\obj\Debug\ChatApp.csproj.CopyComplete

@@ -68,7 +68,7 @@ namespace ChatApp
 
         public void SendMessage(IPacket message)
         {
-            _encProxy.Send(message.serialize());
+            //_encProxy.Send(message.serialize());
             //byte[] msg = Encoding.ASCII.GetBytes(message);
             //int bytesSent = sender.Send(msg);
         }

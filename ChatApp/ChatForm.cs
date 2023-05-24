@@ -68,14 +68,14 @@ namespace ChatApp
             ListViewItem item = ContactsListView.GetItemAt(e.X, e.Y);
             int index = item.Index;
 
-            for (int i = 0; i < ContactsListView.Items.Count; i++)
-            {
-                //if(i == index)
-                ContactsListView.Items[i].BackColor = Color.Black;
+            //for (int i = 0; i < ContactsListView.Items.Count; i++)
+            //{
+            //    if (i == index)
+            //        ContactsListView.Items[i].BackColor = Color.Black;
 
-                //else
-                //    ContactsListView.Items[i].BackColor = Color.Gray;
-            }
+            //    else
+            //        ContactsListView.Items[i].BackColor = Color.Gray;
+            //}
 
             listPanelRight[0].Visible = false;
             listPanelRight[1].Visible = false;
@@ -112,17 +112,17 @@ namespace ChatApp
         }
         private void ContactListView_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
-            Color color = Color.White;
+            Color color = Color.Black;
 
-            //if ((e.State & ListViewItemStates.Selected) != 0)
-            //{
-            //    e.Graphics.FillRectangle(Brushes.Black, e.Bounds);
-            //    color = Color.Gray;
-            //}
-            //else
-            //{
-            //    e.Graphics.FillRectangle(Brushes.Gray, e.Bounds);
-            //}
+            if ((e.State & ListViewItemStates.Focused) != 0)
+            {
+                e.Graphics.FillRectangle(Brushes.Black, e.Bounds);
+                color = Color.Gray;
+            }
+            else
+            {
+                e.Graphics.FillRectangle(Brushes.Gray, e.Bounds);
+            }
 
             // Desenează textul elementului
             if (e.Item.ImageIndex >= 0)
@@ -303,6 +303,11 @@ namespace ChatApp
             listPanelRight[3].Visible = false;
             listPanelRight[4].Visible = true;
             listPanelRight[5].Visible = false;
+        }
+
+        private void InsertContactButton_Click(object sender, EventArgs e)
+        {
+            //chat.ContactToAddTextBox.Text;
         }
     }
 }
