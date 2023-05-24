@@ -24,7 +24,7 @@ namespace ChatApp
             _name = name;
 
 
-            String path = "./Contacts/ProfileImages/" + name + ".jpeg";
+            String path = "./../../Resources/Contacts/ProfileImages/" + name + ".jpeg";
             try
             {
                 bool check = false;
@@ -35,7 +35,7 @@ namespace ChatApp
             }
             catch (Exception exc)
             {
-                _image = new Bitmap("./Contacts/ProfileImages/noimage.jpeg");
+                _image = new Bitmap("./../../Resources/Contacts/ProfileImages/noimage.jpeg");
             }
         }
         public String Name
