@@ -56,6 +56,9 @@
     <Compile Include="ChatForm.Designer.cs">
       <DependentUpon>ChatForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Contact.cs" />
+    <Compile Include="Conversation.cs" />
+    <Compile Include="IComms.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="ClientSocket.cs" />
     <Compile Include="LogInForm.cs">
@@ -95,6 +98,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Contacts\ProfileImages\cosmin.jpeg" />
+    <Content Include="Resources\Contacts\ProfileImages\donuts.jpeg" />
+    <Content Include="Resources\Contacts\ProfileImages\edmund.jpeg" />
+    <Content Include="Resources\Contacts\ProfileImages\noimage.jpeg" />
+    <Content Include="Resources\Contacts\Usernames.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

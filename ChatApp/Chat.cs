@@ -62,10 +62,12 @@ namespace ChatApp
         }
         public void LoadContacts(Contact user)
         {
-            String content = File.ReadAllText("./Contacts/Usernames.txt");
+
+            String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");
             String[] usernames = content.Split('/');
 
-            String[] paths = Directory.GetFiles("./Contacts/ProfileImages");
+            String[] paths = Directory.GetFiles("./../../Resources/Contacts/ProfileImages");
+            Console.WriteLine(paths);
 
 
             try
@@ -86,7 +88,7 @@ namespace ChatApp
                     }
                     if (check == false)
                     {
-                        _contacts.Add(new Contact(username, new Bitmap("./Contacts/ProfileImages/noimage.jpeg")));
+                        _contacts.Add(new Contact(username, new Bitmap("./../../Resources/Contacts/ProfileImages/noimage.jpeg")));
                     }
                 }
 
