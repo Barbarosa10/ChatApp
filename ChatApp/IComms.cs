@@ -16,7 +16,7 @@ namespace ChatApp
     interface IComms
     {
         void Send(byte[] msg);
-        byte[] Recv(int size=1024);
+        byte[] Recv(int size = 1024);
     }
 
     class ClearComms : IComms
@@ -26,7 +26,7 @@ namespace ChatApp
         {
             s = socket;
         }
-        public byte[] Recv(int size=1024)
+        public byte[] Recv(int size = 1024)
         {
             byte[] data = new byte[size];
             s.Receive(data, size, SocketFlags.None);
@@ -89,6 +89,7 @@ namespace ChatApp
             Buffer.BlockCopy(iv, 0, encData, 2, iv.Length);
             Buffer.BlockCopy(ciphertext, 0, encData, iv.Length + 2, ciphertext.Length);
 
+            
             s.Send(encData);
         }
     }

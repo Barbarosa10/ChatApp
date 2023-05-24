@@ -13,10 +13,11 @@ namespace ChatApp
     public partial class LogInForm : Form
     {
         List<Panel> listPanel = new List<Panel>();
-        int index = 0;
         public LogInForm()
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
         }
 
         private void LogInForm_Load(object sender, EventArgs e)
@@ -34,9 +35,9 @@ namespace ChatApp
 
         private void SignInButton_Click(object sender, EventArgs e)
         {
-            ClientSocket.Instance.SendMessage(new LoginPacket(EmailTextBox.Text,PasswordTextBox.Text));
+            ClientSocket.Instance.SendMessage(new LoginPacket(UserTextBox.Text,PasswordTextBox.Text));
 
-            ChatForm chatForm = new ChatForm();
+            ChatForm chatForm = new ChatForm(new Contact(UserTextBox.Text));
             this.Hide();
             chatForm.ShowDialog();
             this.Close();

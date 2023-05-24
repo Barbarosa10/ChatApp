@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ChatApp
 {
@@ -16,6 +18,25 @@ namespace ChatApp
         {
             _name = name;
             _image = image;
+        }
+        public Contact(String name)
+        {
+            _name = name;
+
+
+            String path = "./Contacts/ProfileImages/" + name + ".jpeg";
+            try
+            {
+                bool check = false;
+
+                Console.WriteLine(path + "   \\" + name + ".jpeg");
+
+                _image = new Bitmap(path);
+            }
+            catch (Exception exc)
+            {
+                _image = new Bitmap("./Contacts/ProfileImages/noimage.jpeg");
+            }
         }
         public String Name
         {

@@ -33,7 +33,7 @@ namespace ChatApp
             this.LoginPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.EmailTextBox = new System.Windows.Forms.TextBox();
+            this.UserTextBox = new System.Windows.Forms.TextBox();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
             this.RegisterButton = new System.Windows.Forms.Button();
             this.SignInButton = new System.Windows.Forms.Button();
@@ -60,12 +60,12 @@ namespace ChatApp
             // LoginPanel
             // 
             this.LoginPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.LoginPanel.Controls.Add(this.SignInButton);
             this.LoginPanel.Controls.Add(this.label1);
             this.LoginPanel.Controls.Add(this.pictureBox1);
-            this.LoginPanel.Controls.Add(this.EmailTextBox);
+            this.LoginPanel.Controls.Add(this.UserTextBox);
             this.LoginPanel.Controls.Add(this.PasswordTextBox);
             this.LoginPanel.Controls.Add(this.RegisterButton);
-            this.LoginPanel.Controls.Add(this.SignInButton);
             this.LoginPanel.Controls.Add(this.label5);
             this.LoginPanel.Controls.Add(this.label4);
             this.LoginPanel.Controls.Add(this.label3);
@@ -97,14 +97,14 @@ namespace ChatApp
             this.pictureBox1.TabIndex = 19;
             this.pictureBox1.TabStop = false;
             // 
-            // EmailTextBox
+            // UserTextBox
             // 
-            this.EmailTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EmailTextBox.Location = new System.Drawing.Point(166, 162);
-            this.EmailTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.EmailTextBox.Name = "EmailTextBox";
-            this.EmailTextBox.Size = new System.Drawing.Size(258, 23);
-            this.EmailTextBox.TabIndex = 17;
+            this.UserTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UserTextBox.Location = new System.Drawing.Point(166, 162);
+            this.UserTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.UserTextBox.Name = "UserTextBox";
+            this.UserTextBox.Size = new System.Drawing.Size(258, 23);
+            this.UserTextBox.TabIndex = 17;
             // 
             // PasswordTextBox
             // 
@@ -119,12 +119,14 @@ namespace ChatApp
             // RegisterButton
             // 
             this.RegisterButton.BackColor = System.Drawing.Color.Black;
+            this.RegisterButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RegisterButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.RegisterButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RegisterButton.ForeColor = System.Drawing.Color.Silver;
-            this.RegisterButton.Location = new System.Drawing.Point(195, 353);
+            this.RegisterButton.Location = new System.Drawing.Point(194, 351);
             this.RegisterButton.Margin = new System.Windows.Forms.Padding(2);
             this.RegisterButton.Name = "RegisterButton";
-            this.RegisterButton.Size = new System.Drawing.Size(117, 34);
+            this.RegisterButton.Size = new System.Drawing.Size(126, 38);
             this.RegisterButton.TabIndex = 16;
             this.RegisterButton.Text = "Register now!";
             this.RegisterButton.UseVisualStyleBackColor = false;
@@ -133,9 +135,11 @@ namespace ChatApp
             // SignInButton
             // 
             this.SignInButton.BackColor = System.Drawing.Color.Black;
+            this.SignInButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SignInButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SignInButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignInButton.ForeColor = System.Drawing.Color.Silver;
-            this.SignInButton.Location = new System.Drawing.Point(205, 260);
+            this.SignInButton.Location = new System.Drawing.Point(208, 265);
             this.SignInButton.Margin = new System.Windows.Forms.Padding(2);
             this.SignInButton.Name = "SignInButton";
             this.SignInButton.Size = new System.Drawing.Size(96, 33);
@@ -213,12 +217,14 @@ namespace ChatApp
             // SignUpButton
             // 
             this.SignUpButton.BackColor = System.Drawing.Color.Black;
+            this.SignUpButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SignUpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SignUpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SignUpButton.ForeColor = System.Drawing.Color.Silver;
-            this.SignUpButton.Location = new System.Drawing.Point(223, 340);
+            this.SignUpButton.Location = new System.Drawing.Point(205, 340);
             this.SignUpButton.Margin = new System.Windows.Forms.Padding(2);
             this.SignUpButton.Name = "SignUpButton";
-            this.SignUpButton.Size = new System.Drawing.Size(72, 35);
+            this.SignUpButton.Size = new System.Drawing.Size(103, 35);
             this.SignUpButton.TabIndex = 18;
             this.SignUpButton.Text = "Sign up";
             this.SignUpButton.UseVisualStyleBackColor = false;
@@ -336,7 +342,7 @@ namespace ChatApp
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox PasswordTextBox;
-        private System.Windows.Forms.TextBox EmailTextBox;
+        private System.Windows.Forms.TextBox UserTextBox;
         private System.Windows.Forms.Button RegisterButton;
         private System.Windows.Forms.Button SignInButton;
         private System.Windows.Forms.Label label5;
