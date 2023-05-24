@@ -50,6 +50,5 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(password).CopyTo(_payload, user.Length + 1);
             return serialize();
         }
-
     }
 }

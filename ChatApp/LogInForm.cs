@@ -17,6 +17,9 @@ namespace ChatApp
         public LogInForm()
         {
             InitializeComponent();
+
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
         }
 
         private void LogInForm_Load(object sender, EventArgs e)
@@ -34,9 +37,9 @@ namespace ChatApp
 
         private void SignInButton_Click(object sender, EventArgs e)
         {
-            ClientSocket.Instance.SendMessage(EmailTextBox.Text + " " + PasswordTextBox.Text);
+            ClientSocket.Instance.SendMessage(UserTextBox.Text + " " + PasswordTextBox.Text);
 
-            ChatForm chatForm = new ChatForm();
+            ChatForm chatForm = new ChatForm(new Contact(UserTextBox.Text));
             this.Hide();
             chatForm.ShowDialog();
             this.Close();
