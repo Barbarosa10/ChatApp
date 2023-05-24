@@ -89,7 +89,6 @@ namespace ChatApp
             Buffer.BlockCopy(iv, 0, encData, 2, iv.Length);
             Buffer.BlockCopy(ciphertext, 0, encData, iv.Length + 2, ciphertext.Length);
 
-            
             s.Send(encData);
         }
     }

@@ -30,7 +30,7 @@ namespace ChatApp
                 return instance;
             }
         }
-        private  void StartClient()
+        private void StartClient()
         {
 
             IPAddress remoteIPAddress = System.Net.IPAddress.Parse(IPAddress);
@@ -69,16 +69,18 @@ namespace ChatApp
         public void SendMessage(IPacket message)
         {
             _encProxy.Send(message.serialize());
-            //byte[] msg = Encoding.ASCII.GetBytes(message);
-            //int bytesSent = sender.Send(msg);
         }
-        public String ReceiveMessage()
+
+       /* public IPacket ReceiveMessage()
         {
-            byte[] bytes = new byte[1024];
-
-            int bytesRec = sender.Receive(bytes);
-
+            int size = Convert.ToInt32(_clearProxy.Recv(2));
+            byte[] data = _encProxy.Recv(size);
+            switch(data[0])
+            {
+                case PacketType.LOGIN_ACK:
+                    break;
+            }
             return Encoding.ASCII.GetString(bytes, 0, bytesRec);
-        }
+        }*/
     }
 }

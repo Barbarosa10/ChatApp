@@ -9,7 +9,12 @@ msg_type = {
     2: "REGISTER",
     3: "REGISTER_ACK",
     4: "SEND_MESSAGE",
-    5: "ERROR"
+    5: "SEND_ACK",
+    6: "RETRIEVE_CONTACT",
+    7: "RETRIEVE_CONTACT_ACK",
+    8: "UPLOAD_PROFILE_PHOTO",
+    9: "UPLOAD_PROFILE_ACK",
+    10: "ERROR"
 }
 
 class Message:
@@ -35,6 +40,15 @@ class Message:
 
     def set_message(self, sender_id, dest_id, msg):
         self.raw += sender_id + b"\x00" + dest_id + b"\x00" + msg
+
+    def set_username_and_picture(self, username: bytes, pict:bytes):
+        self.raw += username + b"\x00" + pict
+
+    def get_username_and_picture(self):
+        splitter = self.raw[1:].find(b"\x00")
+        username = self.raw[1:][:splitter]
+        picture =  self.raw[1:][splitter+1:]
+        return username, picture
     
     def from_bytes(self, raw_message):
         self.raw = raw_message
@@ -48,6 +62,9 @@ class Message:
         user, password = self.raw[1:].split(b"\x00")       
         return user.decode("utf-8"), password.decode("utf-8")
     
+    def get_username(self) -> str:
+        return self.raw[1:]
+
     def get_message(self) -> (bytes, bytes, bytes):
         sender_id, dest_id, msg = self.raw[1:].split(b"\x00")
         return sender_id, dest_id, msg

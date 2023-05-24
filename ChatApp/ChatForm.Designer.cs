@@ -31,7 +31,15 @@ namespace ChatApp
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChatForm));
             this.ChatMainPanel = new System.Windows.Forms.Panel();
+            this.ContactsSidePanel = new System.Windows.Forms.Panel();
+            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.ConversationsSidePanel = new System.Windows.Forms.Panel();
+            this.vScrollBar2 = new System.Windows.Forms.VScrollBar();
+            this.ConversationPanel = new System.Windows.Forms.Panel();
+            this.MessageToBeSentBox = new System.Windows.Forms.TextBox();
+            this.sendButton = new System.Windows.Forms.Button();
             this.ProfileSidePanel = new System.Windows.Forms.Panel();
+            this.EmailTextLabel = new System.Windows.Forms.Label();
             this.UsernameLabel = new System.Windows.Forms.Label();
             this.AvatarPictureBoxProfile = new System.Windows.Forms.PictureBox();
             this.SettingsSidePanel = new System.Windows.Forms.Panel();
@@ -41,11 +49,6 @@ namespace ChatApp
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.ProfilePanel = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.ConversationsSidePanel = new System.Windows.Forms.Panel();
-            this.ContactsSidePanel = new System.Windows.Forms.Panel();
-            this.ConversationPanel = new System.Windows.Forms.Panel();
-            this.sendButton = new System.Windows.Forms.Button();
-            this.MessageToBeSentBox = new System.Windows.Forms.TextBox();
             this.ContactsPanel = new System.Windows.Forms.Panel();
             this.LeftSidePanel = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -54,10 +57,10 @@ namespace ChatApp
             this.ContactsButton = new System.Windows.Forms.Button();
             this.ConversationButton = new System.Windows.Forms.Button();
             this.ProfileButton = new System.Windows.Forms.Button();
-            this.EmailTextLabel = new System.Windows.Forms.Label();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.vScrollBar2 = new System.Windows.Forms.VScrollBar();
             this.ChatMainPanel.SuspendLayout();
+            this.ContactsSidePanel.SuspendLayout();
+            this.ConversationsSidePanel.SuspendLayout();
+            this.ConversationPanel.SuspendLayout();
             this.ProfileSidePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AvatarPictureBoxProfile)).BeginInit();
             this.SettingsSidePanel.SuspendLayout();
@@ -66,9 +69,6 @@ namespace ChatApp
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.ProfilePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.ConversationsSidePanel.SuspendLayout();
-            this.ContactsSidePanel.SuspendLayout();
-            this.ConversationPanel.SuspendLayout();
             this.LeftSidePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -76,12 +76,12 @@ namespace ChatApp
             // ChatMainPanel
             // 
             this.ChatMainPanel.BackColor = System.Drawing.Color.Black;
+            this.ChatMainPanel.Controls.Add(this.SettingsSidePanel);
+            this.ChatMainPanel.Controls.Add(this.ProfileSidePanel);
             this.ChatMainPanel.Controls.Add(this.ContactsSidePanel);
             this.ChatMainPanel.Controls.Add(this.ConversationsSidePanel);
-            this.ChatMainPanel.Controls.Add(this.ConversationPanel);
-            this.ChatMainPanel.Controls.Add(this.ProfileSidePanel);
-            this.ChatMainPanel.Controls.Add(this.SettingsSidePanel);
             this.ChatMainPanel.Controls.Add(this.SettingsPanel);
+            this.ChatMainPanel.Controls.Add(this.ConversationPanel);
             this.ChatMainPanel.Controls.Add(this.ProfilePanel);
             this.ChatMainPanel.Controls.Add(this.ContactsPanel);
             this.ChatMainPanel.Controls.Add(this.LeftSidePanel);
@@ -89,6 +89,70 @@ namespace ChatApp
             this.ChatMainPanel.Name = "ChatMainPanel";
             this.ChatMainPanel.Size = new System.Drawing.Size(989, 510);
             this.ChatMainPanel.TabIndex = 0;
+            // 
+            // ContactsSidePanel
+            // 
+            this.ContactsSidePanel.BackColor = System.Drawing.Color.Gray;
+            this.ContactsSidePanel.Controls.Add(this.vScrollBar1);
+            this.ContactsSidePanel.Location = new System.Drawing.Point(109, 0);
+            this.ContactsSidePanel.Name = "ContactsSidePanel";
+            this.ContactsSidePanel.Size = new System.Drawing.Size(153, 509);
+            this.ContactsSidePanel.TabIndex = 5;
+            // 
+            // vScrollBar1
+            // 
+            this.vScrollBar1.Location = new System.Drawing.Point(135, 2);
+            this.vScrollBar1.Name = "vScrollBar1";
+            this.vScrollBar1.Size = new System.Drawing.Size(17, 506);
+            this.vScrollBar1.TabIndex = 0;
+            // 
+            // ConversationsSidePanel
+            // 
+            this.ConversationsSidePanel.BackColor = System.Drawing.Color.Gray;
+            this.ConversationsSidePanel.Controls.Add(this.vScrollBar2);
+            this.ConversationsSidePanel.Location = new System.Drawing.Point(109, 2);
+            this.ConversationsSidePanel.Name = "ConversationsSidePanel";
+            this.ConversationsSidePanel.Size = new System.Drawing.Size(153, 509);
+            this.ConversationsSidePanel.TabIndex = 6;
+            // 
+            // vScrollBar2
+            // 
+            this.vScrollBar2.Location = new System.Drawing.Point(135, 0);
+            this.vScrollBar2.Name = "vScrollBar2";
+            this.vScrollBar2.Size = new System.Drawing.Size(17, 506);
+            this.vScrollBar2.TabIndex = 1;
+            // 
+            // ConversationPanel
+            // 
+            this.ConversationPanel.BackColor = System.Drawing.Color.Black;
+            this.ConversationPanel.Controls.Add(this.MessageToBeSentBox);
+            this.ConversationPanel.Controls.Add(this.sendButton);
+            this.ConversationPanel.Location = new System.Drawing.Point(266, 0);
+            this.ConversationPanel.Name = "ConversationPanel";
+            this.ConversationPanel.Size = new System.Drawing.Size(722, 508);
+            this.ConversationPanel.TabIndex = 2;
+            // 
+            // MessageToBeSentBox
+            // 
+            this.MessageToBeSentBox.BackColor = System.Drawing.Color.White;
+            this.MessageToBeSentBox.Location = new System.Drawing.Point(-2, 467);
+            this.MessageToBeSentBox.Multiline = true;
+            this.MessageToBeSentBox.Name = "MessageToBeSentBox";
+            this.MessageToBeSentBox.Size = new System.Drawing.Size(647, 41);
+            this.MessageToBeSentBox.TabIndex = 0;
+            // 
+            // sendButton
+            // 
+            this.sendButton.BackColor = System.Drawing.Color.Black;
+            this.sendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sendButton.ForeColor = System.Drawing.Color.Silver;
+            this.sendButton.Location = new System.Drawing.Point(644, 466);
+            this.sendButton.Name = "sendButton";
+            this.sendButton.Size = new System.Drawing.Size(79, 43);
+            this.sendButton.TabIndex = 1;
+            this.sendButton.Text = "Send";
+            this.sendButton.UseVisualStyleBackColor = false;
+            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             // 
             // ProfileSidePanel
             // 
@@ -100,6 +164,17 @@ namespace ChatApp
             this.ProfileSidePanel.Name = "ProfileSidePanel";
             this.ProfileSidePanel.Size = new System.Drawing.Size(153, 509);
             this.ProfileSidePanel.TabIndex = 4;
+            // 
+            // EmailTextLabel
+            // 
+            this.EmailTextLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EmailTextLabel.Location = new System.Drawing.Point(1, 136);
+            this.EmailTextLabel.Name = "EmailTextLabel";
+            this.EmailTextLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.EmailTextLabel.Size = new System.Drawing.Size(151, 20);
+            this.EmailTextLabel.TabIndex = 2;
+            this.EmailTextLabel.Text = "danut.duciuc";
+            this.EmailTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // UsernameLabel
             // 
@@ -196,56 +271,6 @@ namespace ChatApp
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
             // 
-            // ConversationsSidePanel
-            // 
-            this.ConversationsSidePanel.BackColor = System.Drawing.Color.Gray;
-            this.ConversationsSidePanel.Controls.Add(this.vScrollBar2);
-            this.ConversationsSidePanel.Location = new System.Drawing.Point(109, 2);
-            this.ConversationsSidePanel.Name = "ConversationsSidePanel";
-            this.ConversationsSidePanel.Size = new System.Drawing.Size(153, 509);
-            this.ConversationsSidePanel.TabIndex = 6;
-            // 
-            // ContactsSidePanel
-            // 
-            this.ContactsSidePanel.BackColor = System.Drawing.Color.Gray;
-            this.ContactsSidePanel.Controls.Add(this.vScrollBar1);
-            this.ContactsSidePanel.Location = new System.Drawing.Point(109, 0);
-            this.ContactsSidePanel.Name = "ContactsSidePanel";
-            this.ContactsSidePanel.Size = new System.Drawing.Size(153, 509);
-            this.ContactsSidePanel.TabIndex = 5;
-            // 
-            // ConversationPanel
-            // 
-            this.ConversationPanel.BackColor = System.Drawing.Color.Black;
-            this.ConversationPanel.Controls.Add(this.MessageToBeSentBox);
-            this.ConversationPanel.Controls.Add(this.sendButton);
-            this.ConversationPanel.Location = new System.Drawing.Point(266, 0);
-            this.ConversationPanel.Name = "ConversationPanel";
-            this.ConversationPanel.Size = new System.Drawing.Size(722, 508);
-            this.ConversationPanel.TabIndex = 2;
-            // 
-            // sendButton
-            // 
-            this.sendButton.BackColor = System.Drawing.Color.Black;
-            this.sendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sendButton.ForeColor = System.Drawing.Color.Silver;
-            this.sendButton.Location = new System.Drawing.Point(644, 466);
-            this.sendButton.Name = "sendButton";
-            this.sendButton.Size = new System.Drawing.Size(79, 43);
-            this.sendButton.TabIndex = 1;
-            this.sendButton.Text = "Send";
-            this.sendButton.UseVisualStyleBackColor = false;
-            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
-            // 
-            // MessageToBeSentBox
-            // 
-            this.MessageToBeSentBox.BackColor = System.Drawing.Color.White;
-            this.MessageToBeSentBox.Location = new System.Drawing.Point(-2, 467);
-            this.MessageToBeSentBox.Multiline = true;
-            this.MessageToBeSentBox.Name = "MessageToBeSentBox";
-            this.MessageToBeSentBox.Size = new System.Drawing.Size(647, 41);
-            this.MessageToBeSentBox.TabIndex = 0;
-            // 
             // ContactsPanel
             // 
             this.ContactsPanel.BackColor = System.Drawing.Color.Black;
@@ -292,7 +317,6 @@ namespace ChatApp
             this.LogoutButton.Text = "Log Out";
             this.LogoutButton.UseVisualStyleBackColor = false;
             this.LogoutButton.Click += new System.EventHandler(this.LogoutButton_Click);
-
             // 
             // SettingsButton
             // 
@@ -350,31 +374,6 @@ namespace ChatApp
             this.ProfileButton.UseVisualStyleBackColor = false;
             this.ProfileButton.Click += new System.EventHandler(this.ProfileButton_Click);
             // 
-            // EmailTextLabel
-            // 
-            this.EmailTextLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EmailTextLabel.Location = new System.Drawing.Point(1, 136);
-            this.EmailTextLabel.Name = "EmailTextLabel";
-            this.EmailTextLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.EmailTextLabel.Size = new System.Drawing.Size(151, 20);
-            this.EmailTextLabel.TabIndex = 2;
-            this.EmailTextLabel.Text = "danut.duciuc";
-            this.EmailTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // vScrollBar1
-            // 
-            this.vScrollBar1.Location = new System.Drawing.Point(135, 2);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 506);
-            this.vScrollBar1.TabIndex = 0;
-            // 
-            // vScrollBar2
-            // 
-            this.vScrollBar2.Location = new System.Drawing.Point(135, 0);
-            this.vScrollBar2.Name = "vScrollBar2";
-            this.vScrollBar2.Size = new System.Drawing.Size(17, 506);
-            this.vScrollBar2.TabIndex = 1;
-            // 
             // ChatForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -385,6 +384,10 @@ namespace ChatApp
             this.Name = "ChatForm";
             this.Text = "ChatForm";
             this.ChatMainPanel.ResumeLayout(false);
+            this.ContactsSidePanel.ResumeLayout(false);
+            this.ConversationsSidePanel.ResumeLayout(false);
+            this.ConversationPanel.ResumeLayout(false);
+            this.ConversationPanel.PerformLayout();
             this.ProfileSidePanel.ResumeLayout(false);
             this.ProfileSidePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AvatarPictureBoxProfile)).EndInit();
@@ -394,10 +397,6 @@ namespace ChatApp
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ProfilePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.ConversationsSidePanel.ResumeLayout(false);
-            this.ContactsSidePanel.ResumeLayout(false);
-            this.ConversationPanel.ResumeLayout(false);
-            this.ConversationPanel.PerformLayout();
             this.LeftSidePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

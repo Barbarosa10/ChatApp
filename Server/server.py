@@ -80,7 +80,7 @@ def register(user:str, password:str) -> str:
     users = db.users
     hashed_password = sha256(password.encode("utf-8")).hexdigest()
     try:
-        if(users.insert_one({"username":user, "password":hashed_password}).inserted_id):
+        if(users.insert_one({"username":user, "password":hashed_password, "profile_picture":b''}).inserted_id):
             return user
     except DuplicateKeyError:
         return ""
@@ -99,6 +99,18 @@ def add_message(sender_id: bytes, dest_id: bytes, msg:bytes) -> str:
     logging.info(f"CONVERSATION: {conv_id}")
     db.messages.insert_one({"conversation_id":conv_id, "sender_id":sender_id, "content":msg, "timestamp":str(int(time()))})
 
+def get_contact_profile(username: bytes) -> bytes:
+    users = db.users
+    user = users.find_one({"username":user})
+    if user == None:
+        raise Exception("No username")
+
+    return user.profile_picture
+
+def upload_photo_to_profile(username: bytes, photo:bytes):
+    db.users.update_one({"username":username.decode("utf-8")}, {"$set": {"profile_picture":photo}})
+
+
 def client_handler(conn):
     client = Client(conn)
     client.init()
@@ -110,36 +122,58 @@ def client_handler(conn):
             if msg.get_msg_type() == "LOGIN":
                 user, password = msg.get_user_and_pass()
                 logging.info(f"{user} is trying to log in...")
+                to_send = Message("LOGIN_ACK")
                 if(login(user, password)):
                     client.login(user)
-                    to_send = Message("LOGIN_ACK")
                     to_send.set_ack_msg("OK")
                 else:
                     logging.warning(f"{user} didn't get the right password")
-                    to_send = Message("ERROR")
                     to_send.set_error_msg("Wrong username/password");
 
             elif msg.get_msg_type() == "REGISTER":
                 user, password = msg.get_user_and_pass()
+                to_send = Message("REGISTER_ACK")
                 if(register(user, password) == user):
                     logging.info(f"{user} registered.")
-                    to_send = Message("REGISTER_ACK")
                     to_send.set_ack_msg("OK")
                 else:
                     logging.warning(f"{user} tried to register again.")
-                    to_send = Message("ERROR")
                     to_send.set_error_msg("User already exists.");
             
             elif msg.get_msg_type() == "SEND_MESSAGE":
                 sender_id, dest_id, mess = msg.get_message()
-                #TODO adding messsage to DB
-                add_message(sender_id, dest_id, mess)
+                to_send = Message("SEND_ACK")
+
                 if(dest_id in users_list):
-                    logging.info(f"Sending message from {sender_id} to {dest_id}")
-                    users_list[dest_id].send(msg)
+                    
+                    if(sender_id != client.username):
+                        logging.warning(f"{client.username} tried to spoof the message sender_id to {sender_id}")
+                        to_send.set_error_msg("You tried to spoof the message")
+                    
+                    else:
+                        add_message(sender_id, dest_id, mess)
+                        logging.info(f"Sending message from {sender_id} to {dest_id}")
+                        users_list[dest_id].send(msg)
+                        to_send.set_ack_msg("OK")
+                
                 else:
+                    to_send.set_error_msg("Server error")
                     logging.info(f"Cannot send message to unlogged user {dest_id}")
 
+            elif msg.get_msg_type() == "RETRIEVE_CONTACT":
+                username = msg.get_username()
+                to_send = Message("RETRIEVE_CONTACT_ACK")
+                try:
+                    pict = get_contact_profile(username.encode("utf-8"))
+                    to_send.set_username_and_picture(username, pict)
+                except:
+                    to_send.set_error_msg("No user with that username")
+
+            elif msg.get_msg_type() == "UPLOAD_PROFILE_PHOTO":
+                username, pict = msg.get_username_and_picture()
+                to_send = Message("RETRIEVE_CONTACT_ACK")
+                to_send.set_ack_msg("OK")
+                
 
             client.send(to_send)
         except Exception as e:
