@@ -13,6 +13,7 @@ namespace ChatApp
     {
         private List<Conversation> _conversations = new List<Conversation>();
         private List<Contact> _contacts = new List<Contact>();
+        private ChatForm _chatForm;
 
         public List<Conversation> Conversations
         {
@@ -21,6 +22,10 @@ namespace ChatApp
         public List<Contact> Contacts
         {
             get { return _contacts; }
+        }
+        public Chat(ChatForm chatForm)
+        {
+            _chatForm = chatForm;
         }
         public Contact Contact(String name)
         {
@@ -35,68 +40,174 @@ namespace ChatApp
         }
         public void AddContact(String username)
         {
+            foreach (Contact contact in _contacts)
+            {
+                if (contact.Name.Equals(username))
+                {
+                    return;
+                }
+            }
             _contacts.Add(new Contact(username));
-        }
-        public void AddContact(String username, Bitmap image)
-        {
-            _contacts.Add(new Contact(username, image));
+
+            String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");
+
+            if (content.Equals(""))
+                content += username;
+            else
+                content += "/" + username;
+
+            File.WriteAllText("./../../Resources/Contacts/Usernames.txt", content);
         }
         public void RemoveContact(String username)
         {
+            bool check = false;
             foreach (Contact contact in _contacts)
             {
                 if (contact.Name.Equals(username))
                 {
                     _contacts.Remove(contact);
+                    check = true;
+                    break;
+                }
+            }
+
+            if (check)
+            {
+                String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");
+                Console.WriteLine(content);
+                Console.WriteLine(username);
+                if (content.Contains("/" + username + "/"))
+                {
+                    content = content.Replace("/" + username, "");
+                }
+                else if (content.Contains(username + "/"))
+                {
+                    content = content.Replace(username + "/", "");
+                }
+                else if (content.Contains("/" + username))
+                {
+                    content = content.Replace("/" + username, "");
+                }
+                else if (content.Equals(username))
+                    content = "";
+                Console.WriteLine(content);
+                File.WriteAllText("./../../Resources/Contacts/Usernames.txt", content);
+
+                RemoveConversation(username);
+            }
+        }
+        public void AddConversation(String username)
+        {
+
+            foreach(Contact contact in _contacts)
+            {
+                if (contact.Name.Equals(username))
+                {
+                    foreach(Conversation conversation in _conversations)
+                    {
+                        if (conversation.Contact.Name.Equals(username))
+                        {
+                            return;
+                        }
+                    }
+
+                    Contact contact1 = new Contact(username);
+                    Conversation conversation1 = new Conversation();
+                    conversation1.Contact = contact1;
+                    _conversations.Add(conversation1);
+
+                    String content = File.ReadAllText("./../../Resources/Contacts/Conversations.txt");
+
+                    if (content.Equals(""))
+                        content += username;
+                    else
+                        content += "/" + username;
+
+                    File.WriteAllText("./../../Resources/Contacts/Conversations.txt", content);
+
                     break;
                 }
             }
         }
-        public void AddConversation(String timestamp, String username, String message)
+        public void RemoveConversation(String username)
         {
+            bool check = false;
 
-        }
-        public void RemoveConversation()
-        {
+            foreach (Conversation conversation in _conversations)
+            {
+                if (conversation.Contact.Name.Equals(username))
+                {
+                    _conversations.Remove(conversation);
+                    check = true;
+                    break;
+                }
+            }
 
+            if (check)
+            {
+                String content = File.ReadAllText("./../../Resources/Contacts/Conversations.txt");
+
+                if (content.Contains("/" + username + "/"))
+                {
+                    content = content.Replace("/" + username, "");
+                }
+                else if (content.Contains(username + "/"))
+                {
+                    content = content.Replace(username + "/", "");
+                }
+                else if (content.Contains("/" + username))
+                {
+                    content = content.Replace("/" + username, "");
+                }
+                else if (content.Equals(username))
+                    content = "";
+
+                File.WriteAllText("./../../Resources/Contacts/Conversations.txt", content);
+            }
         }
+
         public void LoadContacts(Contact user)
         {
-
             String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");
-            String[] usernames = content.Split('/');
-
-            String[] paths = Directory.GetFiles("./../../Resources/Contacts/ProfileImages");
-            Console.WriteLine(paths);
-
-
-            try
+            if (content != "")
             {
-                foreach (String username in usernames)
+                String[] usernames = content.Split('/');
+                try
                 {
-                    if (username != user.Name) { }
-                    bool check = false;
-                    foreach (String path in paths)
+                    foreach (String username in usernames)
                     {
-                        Console.WriteLine(path + "   \\" + username + ".jpeg");
-                        if (path.EndsWith("\\" + username + ".jpeg"))
-                        {
-                            _contacts.Add(new Contact(username, new Bitmap(path)));
-                            check = true;
-                            break;
-                        }
-                    }
-                    if (check == false)
-                    {
-                        _contacts.Add(new Contact(username, new Bitmap("./../../Resources/Contacts/ProfileImages/noimage.jpeg")));
+                        _contacts.Add(new Contact(username));
+
                     }
                 }
-
-
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.Message);
+                }
             }
-            catch (Exception exc)
+        }
+        public void LoadConversations()
+        {
+            String content = File.ReadAllText("./../../Resources/Contacts/Conversations.txt");
+            if (content != "")
             {
-                MessageBox.Show(exc.Message);
+                String[] usernames = content.Split('/');
+                try
+                {
+                    foreach (String username in usernames)
+                    {
+
+                        Contact contact = new Contact(username);
+                        Conversation conversation = new Conversation();
+                        conversation.Contact = contact;
+                        _conversations.Add(conversation);
+
+                    }
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.Message);
+                }
             }
         }
     }

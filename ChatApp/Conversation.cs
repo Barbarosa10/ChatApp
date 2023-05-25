@@ -16,6 +16,10 @@ namespace ChatApp
         private Contact _contact;
         private Dictionary<String, SimpleMessage> _fullMessage = new Dictionary<String, SimpleMessage>();
 
+        public Contact Contact { get; set; }
+        public Conversation()
+        {
+        }
         public Conversation(Contact contact)
         {
             _contact = contact;
