@@ -26,7 +26,7 @@ namespace ChatApp
     {
         byte[] serialize();
         void deserialize(byte[] data);
-        void execute(ChatForm chatForm);
+        void execute(Chat chatForm);
     }
 
     class LoginPacket: IPacket
@@ -64,7 +64,7 @@ namespace ChatApp
             return packet;
         }
 
-        public void execute(ChatForm chatForm)
+        public void execute(Chat chatForm)
         {
             return;
             //throw new NotImplementedException();
@@ -93,7 +93,7 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Message).CopyTo(data, 1);
             return data;
         }
-        public void execute(ChatForm chatForm)
+        public void execute(Chat chatForm)
         {
             return;
             //throw new NotImplementedException();
@@ -137,7 +137,7 @@ namespace ChatApp
             return packet;
         }
 
-        public void execute(ChatForm chatForm)
+        public void execute(Chat chatForm)
         {
             return;
             //throw new NotImplementedException();
@@ -166,7 +166,7 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Message).CopyTo(data, 1);
             return data;
         }
-        public void execute(ChatForm chatForm)
+        public void execute(Chat chatForm)
         {
             return;
             //throw new NotImplementedException();
@@ -197,8 +197,9 @@ namespace ChatApp
         {
             throw new Exception("Nu ai nevoie de asta");
         }
-        public void execute(ChatForm chatForm)
+        public void execute(Chat chatForm)
         {
+            Console.WriteLine("Primit pachet cu poza");
             throw new NotImplementedException();
         }
     }
@@ -225,7 +226,7 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Username).CopyTo(data, 1);
             return data;
         }
-        public void execute(ChatForm chatForm)
+        public void execute(Chat chatForm)
         {
             return;
             //throw new NotImplementedException();
@@ -260,7 +261,7 @@ namespace ChatApp
             Array.Copy(Picture, 0, data, 1 + 1 + Username.Length, Picture.Length);
             return data;
         }
-        public void execute(ChatForm chatForm)
+        public void execute(Chat chatForm)
         {
             return;
             //throw new NotImplementedException();
@@ -286,7 +287,7 @@ namespace ChatApp
         {
             throw new Exception("Nu ai nevoie");
         }
-        public void execute(ChatForm chatForm)
+        public void execute(Chat chatForm)
         {
             return;
             //throw new NotImplementedException();

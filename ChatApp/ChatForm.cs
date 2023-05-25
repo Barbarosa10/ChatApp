@@ -16,6 +16,8 @@ namespace ChatApp
         List<Panel> listPanelMid = new List<Panel>();
         List<Panel> listPanelRight = new List<Panel>();
         Chat chat;
+        Contact logged_user;
+        MessageHandler handler = new MessageHandler();
         public ChatForm(Contact user)
         {
 
@@ -23,6 +25,7 @@ namespace ChatApp
             this.CenterToScreen();
 
             chat = new Chat(this);
+            handler.Start(chat);
             UserLabel.Text = user.Name;
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -136,7 +139,7 @@ namespace ChatApp
             EnableDisableRightPanel(false, false, false, false, false, true, false, false);
 
             Contact contact = chat.Contact(item.Text);
-            if(contact != null)
+            if (contact != null)
             {
                 ContactAvatarPictureBox.Image = contact.Image;
                 ContactLabel.Text = contact.Name;
@@ -182,7 +185,7 @@ namespace ChatApp
                 e.Graphics.DrawImage(image, e.Bounds.Left, e.Bounds.Top);
             }
 
-            Rectangle textBounds = new Rectangle(e.Bounds.Left + ContactsListView.SmallImageList.ImageSize.Width, e.Bounds.Top + ContactsListView.SmallImageList.ImageSize.Height/3, e.Bounds.Width - ContactsListView.SmallImageList.ImageSize.Width, e.Bounds.Height);
+            Rectangle textBounds = new Rectangle(e.Bounds.Left + ContactsListView.SmallImageList.ImageSize.Width, e.Bounds.Top + ContactsListView.SmallImageList.ImageSize.Height / 3, e.Bounds.Width - ContactsListView.SmallImageList.ImageSize.Width, e.Bounds.Height);
             TextRenderer.DrawText(e.Graphics, e.Item.Text, ContactsListView.Font, textBounds, color, TextFormatFlags.Left);
         }
 
@@ -203,7 +206,7 @@ namespace ChatApp
         {
             //RsaEncryption rsa = new RsaEncryption();
             //ClientSocket.Instance.SendMessage(rsa.ExportPublicKey());
- 
+
         }
 
         private void ProfileButton_Click(object sender, EventArgs e)
@@ -312,6 +315,86 @@ namespace ChatApp
         private void InsertContactButton_Click(object sender, EventArgs e)
         {
             //chat.ContactToAddTextBox.Text;
+            chat.AddContact(ContactToAddTextBox.Text);
+            ClientSocket.Instance.SendMessage(new RetrieveContactPacket(ContactToAddTextBox.Text));
+            AddContactToListView();
+        }
+
+        private void AddConversationButton_Click(object sender, EventArgs e)
+        {
+            EnableDisableRightPanel(false, false, false, false, false, false, true, false);
+        }
+        private void EnableDisableRightPanel(bool profilePanel, bool contactsPanel, bool conversationPanel, bool settingsPanel, bool addContactsPanel, bool contactPanel, bool addConversationPanel, bool conversationMainPanel)
+        {
+
+            listPanelRight[0].Visible = profilePanel;
+            listPanelRight[1].Visible = contactsPanel;
+            listPanelRight[2].Visible = conversationPanel;
+            listPanelRight[3].Visible = settingsPanel;
+            listPanelRight[4].Visible = addContactsPanel;
+            listPanelRight[5].Visible = contactPanel;
+            listPanelRight[6].Visible = addConversationPanel;
+            listPanelRight[7].Visible = conversationMainPanel;
+
+        }
+        private void EnableDisableLeftPanel(bool profilePanel, bool contactsPanel, bool conversationsPanel, bool settingsPanel)
+        {
+            listPanelMid[0].Visible = profilePanel;
+            listPanelMid[1].Visible = contactsPanel;
+            listPanelMid[2].Visible = conversationsPanel;
+            listPanelMid[3].Visible = settingsPanel;
+        }
+
+        private void DeleteContactButton_Click(object sender, EventArgs e)
+        {
+            chat.RemoveContact(ContactLabel.Text);
+            AddContactToListView();
+        }
+
+        public void AddContactToListView()
+        {
+            ContactsListView.Clear();
+
+            ContactsListView.Columns.Add("Contacts", 132);
+            ImageList image = new ImageList();
+            image.ImageSize = new Size(40, 40);
+
+            for (int i = 0; i < chat.Contacts.Count; i++)
+            {
+                image.Images.Add(chat.Contacts[i].Image);
+                ContactsListView.Items.Add(chat.Contacts[i].Name, i);
+
+            }
+
+            ContactsListView.SmallImageList = image;
+        }
+        public void AddConversationsToListView()
+        {
+            ConversationsListView.Clear();
+
+            ConversationsListView.Columns.Add("Conversations", 132);
+            ImageList image = new ImageList();
+            image.ImageSize = new Size(40, 40);
+
+            for (int i = 0; i < chat.Conversations.Count; i++)
+            {
+                image.Images.Add(chat.Conversations[i].Contact.Image);
+                ConversationsListView.Items.Add(chat.Conversations[i].Contact.Name, i);
+            }
+
+            ConversationsListView.SmallImageList = image;
+        }
+
+        private void InsertConversationButton_Click(object sender, EventArgs e)
+        {
+            chat.AddConversation(ConversationToAddTextBox.Text);
+            AddConversationsToListView();
+        }
+
+        private void DeleteConversationButton_Click(object sender, EventArgs e)
+        {
+            chat.RemoveConversation(ConversationTopLabel.Text);
+            AddConversationsToListView();
         }
     }
 }
