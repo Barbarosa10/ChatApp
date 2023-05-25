@@ -15,11 +15,15 @@ namespace ChatApp
     {
         List<Panel> listPanelMid = new List<Panel>();
         List<Panel> listPanelRight = new List<Panel>();
-        Chat chat = new Chat();
+        Chat chat;
         public ChatForm(Contact user)
         {
+
             InitializeComponent();
             this.CenterToScreen();
+
+            chat = new Chat(this);
+            UserLabel.Text = user.Name;
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -33,6 +37,8 @@ namespace ChatApp
             listPanelRight.Add(SettingsPanel);
             listPanelRight.Add(AddContactsPanel);
             listPanelRight.Add(ContactPanel);
+            listPanelRight.Add(AddConversationPanel);
+            listPanelRight.Add(ConversationMainPanel);
 
             listPanelMid.Add(ProfileSidePanel);
             listPanelMid.Add(ContactsSidePanel);
@@ -42,31 +48,80 @@ namespace ChatApp
             ProfileButton.BackColor = Color.DarkGray;
             ProfileButton.ForeColor = Color.Black;
 
-            listPanelRight[0].Visible = true;
-            listPanelRight[1].Visible = false;
-            listPanelRight[2].Visible = false;
-            listPanelRight[3].Visible = false;
-            listPanelRight[4].Visible = false;
-            listPanelRight[5].Visible = false;
-
-            listPanelMid[0].Visible = true;
-            listPanelMid[1].Visible = false;
-            listPanelMid[2].Visible = false;
-            listPanelMid[3].Visible = false;
+            EnableDisableRightPanel(true, false, false, false, false, false, false, false);
+            EnableDisableLeftPanel(true, false, false, false);
 
             ContactsListView.OwnerDraw = true;
             ContactsListView.DrawItem += ContactListView_DrawItem;
             ContactsListView.MouseMove += ContactListView_MouseMove;
             ContactsListView.MouseClick += ContactListView_MouseClick;
-
-
             chat.LoadContacts(user);
+
+            ConversationsListView.OwnerDraw = true;
+            ConversationsListView.DrawItem += ConversationListView_DrawItem;
+            ConversationsListView.MouseMove += ConversationListView_MouseMove;
+            ConversationsListView.MouseClick += ConversationListView_MouseClick;
+            chat.LoadConversations();
         }
-        
+
+        private void ConversationListView_MouseClick(object sender, MouseEventArgs e)
+        {
+            ListViewItem item = ConversationsListView.GetItemAt(e.X, e.Y);
+
+            EnableDisableRightPanel(false, false, true, false, false, false, false, false);
+
+            Contact contact = chat.Contact(item.Text);
+            if (contact != null)
+            {
+                ConversationTopAvatarPictureBox.Image = contact.Image;
+                ConversationTopLabel.Text = contact.Name;
+            }
+
+        }
+        private void ConversationListView_MouseMove(object sender, MouseEventArgs e)
+        {
+            // Obține elementul de sub cursor
+            ListViewItem item = ConversationsListView.GetItemAt(e.X, e.Y);
+
+            if (item != null)
+            {
+                // Setează cursorul personalizat pentru elementul curent
+                ConversationsListView.Cursor = Cursors.Hand; // înlocuiește Cursors.Hand cu cursorul dorit
+            }
+            else
+            {
+                // Setează cursorul implicit în cazul în care mouse-ul nu se află deasupra unui element
+                ConversationsListView.Cursor = Cursors.Default;
+            }
+        }
+        private void ConversationListView_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            Color color = Color.Black;
+
+            if ((e.State & ListViewItemStates.Focused) != 0)
+            {
+                e.Graphics.FillRectangle(Brushes.Black, e.Bounds);
+                color = Color.Gray;
+            }
+            else
+            {
+                e.Graphics.FillRectangle(Brushes.Gray, e.Bounds);
+            }
+
+            // Desenează textul elementului
+            if (e.Item.ImageIndex >= 0)
+            {
+                Image image = ConversationsListView.SmallImageList.Images[e.Item.ImageIndex];
+                e.Graphics.DrawImage(image, e.Bounds.Left, e.Bounds.Top);
+            }
+
+            Rectangle textBounds = new Rectangle(e.Bounds.Left + ConversationsListView.SmallImageList.ImageSize.Width, e.Bounds.Top + ConversationsListView.SmallImageList.ImageSize.Height / 3, e.Bounds.Width - ConversationsListView.SmallImageList.ImageSize.Width, e.Bounds.Height);
+            TextRenderer.DrawText(e.Graphics, e.Item.Text, ConversationsListView.Font, textBounds, color, TextFormatFlags.Left);
+        }
+
         private void ContactListView_MouseClick(object sender, MouseEventArgs e)
         {
             ListViewItem item = ContactsListView.GetItemAt(e.X, e.Y);
-            int index = item.Index;
 
             //for (int i = 0; i < ContactsListView.Items.Count; i++)
             //{
@@ -77,12 +132,7 @@ namespace ChatApp
             //        ContactsListView.Items[i].BackColor = Color.Gray;
             //}
 
-            listPanelRight[0].Visible = false;
-            listPanelRight[1].Visible = false;
-            listPanelRight[2].Visible = false;
-            listPanelRight[3].Visible = false;
-            listPanelRight[4].Visible = false;
-            listPanelRight[5].Visible = true;
+            EnableDisableRightPanel(false, false, false, false, false, true, false, false);
 
             Contact contact = chat.Contact(item.Text);
             if(contact != null)
@@ -133,8 +183,6 @@ namespace ChatApp
 
             Rectangle textBounds = new Rectangle(e.Bounds.Left + ContactsListView.SmallImageList.ImageSize.Width, e.Bounds.Top + ContactsListView.SmallImageList.ImageSize.Height/3, e.Bounds.Width - ContactsListView.SmallImageList.ImageSize.Width, e.Bounds.Height);
             TextRenderer.DrawText(e.Graphics, e.Item.Text, ContactsListView.Font, textBounds, color, TextFormatFlags.Left);
-
-
         }
 
         private void LogoutButton_Click(object sender, EventArgs e)
@@ -168,21 +216,9 @@ namespace ChatApp
             SettingsButton.BackColor = Color.Black;
             SettingsButton.ForeColor = Color.Silver;
 
-            listPanelRight[0].Visible = true;
-            listPanelRight[1].Visible = false;
-            listPanelRight[2].Visible = false;
-            listPanelRight[3].Visible = false;
-            listPanelRight[4].Visible = false;
-            listPanelRight[5].Visible = false;
-
-            listPanelMid[0].Visible = true;
-            listPanelMid[1].Visible = false;
-            listPanelMid[2].Visible = false;
-            listPanelMid[3].Visible = false;
+            EnableDisableRightPanel(true, false, false, false, false, false, false, false);
+            EnableDisableLeftPanel(true, false, false, false);
         }
-
-
-
 
         private void ContactsButton_Click(object sender, EventArgs e)
         {
@@ -195,37 +231,14 @@ namespace ChatApp
             SettingsButton.BackColor = Color.Black;
             SettingsButton.ForeColor = Color.Silver;
 
-            listPanelRight[0].Visible = false;
-            listPanelRight[1].Visible = true;
-            listPanelRight[2].Visible = false;
-            listPanelRight[3].Visible = false;
-            listPanelRight[4].Visible = false;
-            listPanelRight[5].Visible = false;
-
-            listPanelMid[0].Visible = false;
-            listPanelMid[1].Visible = true;
-            listPanelMid[2].Visible = false;
-            listPanelMid[3].Visible = false;
+            EnableDisableRightPanel(false, true, false, false, false, false, false, false);
+            EnableDisableLeftPanel(false, true, false, false);
 
             ContactsListView.View = View.Details;
 
             ContactsListView.ForeColor = Color.White;
-           
 
-            ContactsListView.Clear();
-           
-            ContactsListView.Columns.Add("Contacts", 132);
-            ImageList image = new ImageList();
-            image.ImageSize = new Size(40, 40);
-            
-            for(int i = 0; i < chat.Contacts.Count; i++)
-            {
-                image.Images.Add(chat.Contacts[i].Image);
-                ContactsListView.Items.Add(chat.Contacts[i].Name, i);
-
-            }
-
-            ContactsListView.SmallImageList = image;
+            AddContactToListView();
         }
 
         private void ConversationButton_Click(object sender, EventArgs e)
@@ -239,17 +252,14 @@ namespace ChatApp
             SettingsButton.BackColor = Color.Black;
             SettingsButton.ForeColor = Color.Silver;
 
-            listPanelRight[0].Visible = false;
-            listPanelRight[1].Visible = false;
-            listPanelRight[2].Visible = true;
-            listPanelRight[3].Visible = false;
-            listPanelRight[4].Visible = false;
-            listPanelRight[5].Visible = false;
+            EnableDisableRightPanel(false, false, false, false, false, false, false, true);
+            EnableDisableLeftPanel(false, false, true, false);
 
-            listPanelMid[0].Visible = false;
-            listPanelMid[1].Visible = false;
-            listPanelMid[2].Visible = true;
-            listPanelMid[3].Visible = false;
+            ConversationsListView.View = View.Details;
+
+            ConversationsListView.ForeColor = Color.White;
+
+            AddConversationsToListView();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
@@ -263,17 +273,8 @@ namespace ChatApp
             SettingsButton.BackColor = Color.DarkGray;
             SettingsButton.ForeColor = Color.Black;
 
-            listPanelRight[0].Visible = false;
-            listPanelRight[1].Visible = false;
-            listPanelRight[2].Visible = false;
-            listPanelRight[3].Visible = true;
-            listPanelRight[4].Visible = false;
-            listPanelRight[5].Visible = false;
-
-            listPanelMid[0].Visible = false;
-            listPanelMid[1].Visible = false;
-            listPanelMid[2].Visible = false;
-            listPanelMid[3].Visible = true;
+            EnableDisableRightPanel(false, false, false, true, false, false, false, false);
+            EnableDisableLeftPanel(false, false, false, true);
         }
 
         private void LoadAvatarButton_Click_1(object sender, EventArgs e)
@@ -297,17 +298,90 @@ namespace ChatApp
 
         private void AddContactButton_Click(object sender, EventArgs e)
         {
-            listPanelRight[0].Visible = false;
-            listPanelRight[1].Visible = false;
-            listPanelRight[2].Visible = false;
-            listPanelRight[3].Visible = false;
-            listPanelRight[4].Visible = true;
-            listPanelRight[5].Visible = false;
+            EnableDisableRightPanel(false, false, false, false, true, false, false, false);
         }
 
         private void InsertContactButton_Click(object sender, EventArgs e)
         {
-            //chat.ContactToAddTextBox.Text;
+            chat.AddContact(ContactToAddTextBox.Text);
+            AddContactToListView();
+        }
+
+        private void AddConversationButton_Click(object sender, EventArgs e)
+        {
+            EnableDisableRightPanel(false, false, false, false, false, false, true, false);
+        }
+        private void EnableDisableRightPanel(bool profilePanel, bool contactsPanel, bool conversationPanel, bool settingsPanel, bool addContactsPanel, bool contactPanel, bool addConversationPanel, bool conversationMainPanel)
+        {
+
+            listPanelRight[0].Visible = profilePanel;
+            listPanelRight[1].Visible = contactsPanel;
+            listPanelRight[2].Visible = conversationPanel;
+            listPanelRight[3].Visible = settingsPanel;
+            listPanelRight[4].Visible = addContactsPanel;
+            listPanelRight[5].Visible = contactPanel;
+            listPanelRight[6].Visible = addConversationPanel;
+            listPanelRight[7].Visible = conversationMainPanel;
+
+        }
+        private void EnableDisableLeftPanel(bool profilePanel, bool contactsPanel, bool conversationsPanel, bool settingsPanel)
+        {
+            listPanelMid[0].Visible = profilePanel;
+            listPanelMid[1].Visible = contactsPanel;
+            listPanelMid[2].Visible = conversationsPanel;
+            listPanelMid[3].Visible = settingsPanel;
+        }
+
+        private void DeleteContactButton_Click(object sender, EventArgs e)
+        {
+            chat.RemoveContact(ContactLabel.Text);
+            AddContactToListView();
+        }
+
+        public void AddContactToListView()
+        {
+            ContactsListView.Clear();
+
+            ContactsListView.Columns.Add("Contacts", 132);
+            ImageList image = new ImageList();
+            image.ImageSize = new Size(40, 40);
+
+            for (int i = 0; i < chat.Contacts.Count; i++)
+            {
+                image.Images.Add(chat.Contacts[i].Image);
+                ContactsListView.Items.Add(chat.Contacts[i].Name, i);
+
+            }
+
+            ContactsListView.SmallImageList = image;
+        }
+        public void AddConversationsToListView()
+        {
+            ConversationsListView.Clear();
+
+            ConversationsListView.Columns.Add("Conversations", 132);
+            ImageList image = new ImageList();
+            image.ImageSize = new Size(40, 40);
+
+            for (int i = 0; i < chat.Conversations.Count; i++)
+            {
+                image.Images.Add(chat.Conversations[i].Contact.Image);
+                ConversationsListView.Items.Add(chat.Conversations[i].Contact.Name, i);
+            }
+
+            ConversationsListView.SmallImageList = image;
+        }
+
+        private void InsertConversationButton_Click(object sender, EventArgs e)
+        {
+            chat.AddConversation(ConversationToAddTextBox.Text);
+            AddConversationsToListView();
+        }
+
+        private void DeleteConversationButton_Click(object sender, EventArgs e)
+        {
+            chat.RemoveConversation(ConversationTopLabel.Text);
+            AddConversationsToListView();
         }
     }
 }
