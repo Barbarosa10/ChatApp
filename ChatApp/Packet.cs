@@ -14,12 +14,19 @@ namespace ChatApp
         REGISTER_ACK,
         SEND_MESSAGE,
         SEND_ACK,
+        RETREIVE_CONTACT,
+        RETREIVE_ACK,
+        UPLOAD_PHOTO,
+        UPLOAD_PHOTO_ACK,
         ERROR
     }
+
+    // Folosim sablonul de proiectare Command
     interface IPacket
     {
         byte[] serialize();
         void deserialize(byte[] data);
+        void execute(ChatForm chatForm);
     }
 
     class LoginPacket: IPacket
@@ -56,9 +63,43 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Password).CopyTo(packet, 1 + Username.Length + 1);
             return packet;
         }
+
+        public void execute(ChatForm chatForm)
+        {
+            return;
+            //throw new NotImplementedException();
+        }
     }
 
-  
+    class LoginAckPacket : IPacket
+    {
+        public string Message { get; set; }
+        public LoginAckPacket(string message)
+        {
+            Message = message;
+        }
+
+        public LoginAckPacket() { }
+
+        public void deserialize(byte[] data)
+        {
+            Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
+        }
+
+        public byte[] serialize()
+        {
+            byte[] data = new byte[Message.Length + 1];
+            data[0] = (byte)PacketType.LOGIN_ACK;
+            Encoding.UTF8.GetBytes(Message).CopyTo(data, 1);
+            return data;
+        }
+        public void execute(ChatForm chatForm)
+        {
+            return;
+            //throw new NotImplementedException();
+        }
+    }
+
 
     class RegisterPacket : IPacket
     {
@@ -74,6 +115,7 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
+
             int username_len = Array.IndexOf(data, 0);
             byte[] username = new byte[username_len - 1];
             Array.Copy(data, 1, username, 0, username_len);
@@ -94,16 +136,164 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Password).CopyTo(packet, 1 + Username.Length + 1);
             return packet;
         }
+
+        public void execute(ChatForm chatForm)
+        {
+            return;
+            //throw new NotImplementedException();
+        }
+    }
+
+    class RegisterAckPacket : IPacket
+    {
+        public string Message { get; set; }
+        public RegisterAckPacket(string message)
+        {
+            Message = message;
+        }
+
+        public RegisterAckPacket() { }
+
+        public void deserialize(byte[] data)
+        {
+            Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
+        }
+
+        public byte[] serialize()
+        {
+            byte[] data = new byte[Message.Length + 1];
+            data[0] = (byte)PacketType.REGISTER_ACK;
+            Encoding.UTF8.GetBytes(Message).CopyTo(data, 1);
+            return data;
+        }
+        public void execute(ChatForm chatForm)
+        {
+            return;
+            //throw new NotImplementedException();
+        }
+    }
+
+    class RetreiveContactAckPacket : IPacket
+    {
+        public string Username { get; set; }
+        public byte[] Picture { get; set; }
+        public RetreiveContactAckPacket(string username, byte[] pict)
+        {
+            Picture = (byte[])pict.Clone();
+            Username = username;
+        }
+
+        public RetreiveContactAckPacket() { }
+
+        public void deserialize(byte[] data)
+        {
+            int username_len = Array.IndexOf(data, 0);
+            Username = Encoding.UTF8.GetString(data.Take(username_len).ToArray());
+            Picture = new byte[data.Length - username_len - 1];
+            Array.Copy(data, username_len + 1, Picture, 0, data.Length - username_len - 1);
+        }
+
+        public byte[] serialize()
+        {
+            throw new Exception("Nu ai nevoie de asta");
+        }
+        public void execute(ChatForm chatForm)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class RetrieveContactPacket : IPacket
+    {
+        public string Username { get; set; }
+        public RetrieveContactPacket(string username)
+        {
+            Username = username;
+        }
+
+        public RetrieveContactPacket() { }
+
+        public void deserialize(byte[] data)
+        {
+            Username = Encoding.UTF8.GetString(data);
+        }
+
+        public byte[] serialize()
+        {
+            byte[] data = new byte[Username.Length + 1];
+            data[0] = (byte)PacketType.RETREIVE_CONTACT;
+            Encoding.UTF8.GetBytes(Username).CopyTo(data, 1);
+            return data;
+        }
+        public void execute(ChatForm chatForm)
+        {
+            return;
+            //throw new NotImplementedException();
+        }
+    }
+
+    class UploadPhotoPacket : IPacket
+    {
+        public string Username { get; set; }
+        public byte[] Picture { get; set; }
+        public UploadPhotoPacket(string username, byte[] pict)
+        {
+            Picture = (byte[])pict.Clone();
+            Username = username;
+        }
+
+        public UploadPhotoPacket() { }
+
+        public void deserialize(byte[] data)
+        {
+            int username_len = Array.IndexOf(data, 0);
+            Username = Encoding.UTF8.GetString(data.Take(username_len).ToArray());
+            Picture = new byte[data.Length - username_len - 1];
+            Array.Copy(data, username_len + 1, Picture, 0, data.Length - username_len - 1);
+        }
+
+        public byte[] serialize()
+        {
+            byte[] data = new byte[Username.Length + 2 + Picture.Length];
+            data[0] = (byte)PacketType.UPLOAD_PHOTO;
+            Encoding.UTF8.GetBytes(Username).CopyTo(data, 1);
+            Array.Copy(Picture, 0, data, 1 + 1 + Username.Length, Picture.Length);
+            return data;
+        }
+        public void execute(ChatForm chatForm)
+        {
+            return;
+            //throw new NotImplementedException();
+        }
+    }
+
+    class UploadPhotoAckPacket : IPacket
+    {
+        public string Message { get; set; }
+        public UploadPhotoAckPacket(string message)
+        {
+            Message = message;
+        }
+
+        public UploadPhotoAckPacket() { }
+
+        public void deserialize(byte[] data)
+        {
+            Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
+        }
+
+        public byte[] serialize()
+        {
+            throw new Exception("Nu ai nevoie");
+        }
+        public void execute(ChatForm chatForm)
+        {
+            return;
+            //throw new NotImplementedException();
+        }
     }
     static class Packet
     {
-        enum PacketType
-        {
-            LOGIN,
-            REGISTER,
-            SEND_MESSAGE,
-            ERROR
-        }
         static byte _type;
         static byte[] _payload;
         

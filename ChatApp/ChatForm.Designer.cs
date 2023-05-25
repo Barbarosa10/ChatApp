@@ -593,6 +593,24 @@ namespace ChatApp
             this.pictureBox4.TabIndex = 14;
             this.pictureBox4.TabStop = false;
             // 
+            this.UsernameToAddLabel.Name = "UsernameToAddLabel";
+            this.UsernameToAddLabel.Size = new System.Drawing.Size(112, 39);
+            this.UsernameToAddLabel.TabIndex = 0;
+            this.UsernameToAddLabel.Text = "Username:";
+            this.UsernameToAddLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            this.UsernameToAddLabel.Name = "UsernameToAddLabel";
+            this.UsernameToAddLabel.Size = new System.Drawing.Size(112, 39);
+            this.UsernameToAddLabel.TabIndex = 0;
+            this.UsernameToAddLabel.Text = "Username:";
+            this.UsernameToAddLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            this.UsernameToAddLabel.Name = "UsernameToAddLabel";
+            this.UsernameToAddLabel.Size = new System.Drawing.Size(112, 39);
+            this.UsernameToAddLabel.TabIndex = 0;
+            this.UsernameToAddLabel.Text = "Username:";
+            this.UsernameToAddLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // SettingsSidePanel
             // 
             this.SettingsSidePanel.BackColor = System.Drawing.Color.Gray;
@@ -730,22 +748,10 @@ namespace ChatApp
             this.ProfileButton.Size = new System.Drawing.Size(112, 53);
             this.ProfileButton.TabIndex = 0;
             this.ProfileButton.UseVisualStyleBackColor = false;
-            this.ProfileButton.Click += new System.EventHandler(this.ProfileButton_Click);
-            // 
-            // ChatForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(989, 509);
-            this.Controls.Add(this.ChatMainPanel);
-            this.Name = "ChatForm";
-            this.Text = "ChatForm";
-            this.ChatMainPanel.ResumeLayout(false);
             this.ConversationMainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            this.ConversationPanel.ResumeLayout(false);
-            this.ConversationPanel.PerformLayout();
+            // ChatForm
+            // 
             this.TopConversationPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ConversationTopAvatarPictureBox)).EndInit();
             this.SettingsPanel.ResumeLayout(false);
@@ -755,16 +761,28 @@ namespace ChatApp
             this.AddConversationPanel.PerformLayout();
             this.ContactPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ContactAvatarPictureBox)).EndInit();
-            this.AddContactsPanel.ResumeLayout(false);
-            this.AddContactsPanel.PerformLayout();
-            this.ContactsSidePanel.ResumeLayout(false);
-            this.ProfileSidePanel.ResumeLayout(false);
-            this.ProfileSidePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AvatarPictureBoxProfile)).EndInit();
             this.ProfilePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ContactsPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            this.ContactsSidePanel.ResumeLayout(false);
+            this.AddConversationPanel.PerformLayout();
+            this.ContactPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ContactAvatarPictureBox)).EndInit();
+            this.AddContactsPanel.ResumeLayout(false);
+            this.AddContactsPanel.PerformLayout();
+            this.ContactsSidePanel.ResumeLayout(false);
+            this.ProfilePanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.ContactsPanel.ResumeLayout(false);
+            this.AddContactsPanel.ResumeLayout(false);
+            this.AddContactsPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            this.ProfileSidePanel.ResumeLayout(false);
+            this.ProfileSidePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AvatarPictureBoxProfile)).EndInit();
+            this.AddContactsPanel.ResumeLayout(false);
+            this.AddContactsPanel.PerformLayout();
             this.SettingsSidePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.AvatarPictureBoxSettings)).EndInit();
             this.LeftSidePanel.ResumeLayout(false);

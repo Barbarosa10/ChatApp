@@ -31,21 +31,21 @@ namespace ChatApp
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogInForm));
             this.LoginPanel = new System.Windows.Forms.Panel();
+            this.SignInButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.UserTextBox = new System.Windows.Forms.TextBox();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
             this.RegisterButton = new System.Windows.Forms.Button();
-            this.SignInButton = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.RegistrationPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.SignUpButton = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.RegisterConfirmPassword = new System.Windows.Forms.TextBox();
+            this.RegisterPassword = new System.Windows.Forms.TextBox();
+            this.RegisterUsername = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -73,6 +73,22 @@ namespace ChatApp
             this.LoginPanel.Name = "LoginPanel";
             this.LoginPanel.Size = new System.Drawing.Size(516, 426);
             this.LoginPanel.TabIndex = 0;
+            // 
+            // SignInButton
+            // 
+            this.SignInButton.BackColor = System.Drawing.Color.Black;
+            this.SignInButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SignInButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SignInButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SignInButton.ForeColor = System.Drawing.Color.Silver;
+            this.SignInButton.Location = new System.Drawing.Point(208, 265);
+            this.SignInButton.Margin = new System.Windows.Forms.Padding(2);
+            this.SignInButton.Name = "SignInButton";
+            this.SignInButton.Size = new System.Drawing.Size(96, 33);
+            this.SignInButton.TabIndex = 15;
+            this.SignInButton.Text = "Sign in";
+            this.SignInButton.UseVisualStyleBackColor = false;
+            this.SignInButton.Click += new System.EventHandler(this.SignInButton_Click);
             // 
             // label1
             // 
@@ -132,22 +148,6 @@ namespace ChatApp
             this.RegisterButton.UseVisualStyleBackColor = false;
             this.RegisterButton.Click += new System.EventHandler(this.RegisterButton_Click);
             // 
-            // SignInButton
-            // 
-            this.SignInButton.BackColor = System.Drawing.Color.Black;
-            this.SignInButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.SignInButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SignInButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SignInButton.ForeColor = System.Drawing.Color.Silver;
-            this.SignInButton.Location = new System.Drawing.Point(208, 265);
-            this.SignInButton.Margin = new System.Windows.Forms.Padding(2);
-            this.SignInButton.Name = "SignInButton";
-            this.SignInButton.Size = new System.Drawing.Size(96, 33);
-            this.SignInButton.TabIndex = 15;
-            this.SignInButton.Text = "Sign in";
-            this.SignInButton.UseVisualStyleBackColor = false;
-            this.SignInButton.Click += new System.EventHandler(this.SignInButton_Click);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -189,9 +189,9 @@ namespace ChatApp
             this.RegistrationPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.RegistrationPanel.Controls.Add(this.label2);
             this.RegistrationPanel.Controls.Add(this.SignUpButton);
-            this.RegistrationPanel.Controls.Add(this.textBox3);
-            this.RegistrationPanel.Controls.Add(this.textBox4);
-            this.RegistrationPanel.Controls.Add(this.textBox5);
+            this.RegistrationPanel.Controls.Add(this.RegisterConfirmPassword);
+            this.RegistrationPanel.Controls.Add(this.RegisterPassword);
+            this.RegistrationPanel.Controls.Add(this.RegisterUsername);
             this.RegistrationPanel.Controls.Add(this.label6);
             this.RegistrationPanel.Controls.Add(this.label7);
             this.RegistrationPanel.Controls.Add(this.label9);
@@ -230,32 +230,32 @@ namespace ChatApp
             this.SignUpButton.UseVisualStyleBackColor = false;
             this.SignUpButton.Click += new System.EventHandler(this.SignUpButton_Click);
             // 
-            // textBox3
+            // RegisterConfirmPassword
             // 
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(167, 298);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(234, 23);
-            this.textBox3.TabIndex = 17;
+            this.RegisterConfirmPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RegisterConfirmPassword.Location = new System.Drawing.Point(167, 298);
+            this.RegisterConfirmPassword.Margin = new System.Windows.Forms.Padding(2);
+            this.RegisterConfirmPassword.Name = "RegisterConfirmPassword";
+            this.RegisterConfirmPassword.Size = new System.Drawing.Size(234, 23);
+            this.RegisterConfirmPassword.TabIndex = 17;
             // 
-            // textBox4
+            // RegisterPassword
             // 
-            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.Location = new System.Drawing.Point(167, 243);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(234, 23);
-            this.textBox4.TabIndex = 16;
+            this.RegisterPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RegisterPassword.Location = new System.Drawing.Point(167, 243);
+            this.RegisterPassword.Margin = new System.Windows.Forms.Padding(2);
+            this.RegisterPassword.Name = "RegisterPassword";
+            this.RegisterPassword.Size = new System.Drawing.Size(234, 23);
+            this.RegisterPassword.TabIndex = 16;
             // 
-            // textBox5
+            // RegisterUsername
             // 
-            this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox5.Location = new System.Drawing.Point(167, 196);
-            this.textBox5.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(234, 23);
-            this.textBox5.TabIndex = 15;
+            this.RegisterUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RegisterUsername.Location = new System.Drawing.Point(167, 196);
+            this.RegisterUsername.Margin = new System.Windows.Forms.Padding(2);
+            this.RegisterUsername.Name = "RegisterUsername";
+            this.RegisterUsername.Size = new System.Drawing.Size(234, 23);
+            this.RegisterUsername.TabIndex = 15;
             // 
             // label6
             // 
@@ -321,8 +321,8 @@ namespace ChatApp
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(514, 424);
-            this.Controls.Add(this.LoginPanel);
             this.Controls.Add(this.RegistrationPanel);
+            this.Controls.Add(this.LoginPanel);
             this.Name = "LogInForm";
             this.Text = "LogIn";
             this.Load += new System.EventHandler(this.LogInForm_Load);
@@ -351,9 +351,9 @@ namespace ChatApp
         private System.Windows.Forms.Panel RegistrationPanel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button SignUpButton;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox RegisterConfirmPassword;
+        private System.Windows.Forms.TextBox RegisterPassword;
+        private System.Windows.Forms.TextBox RegisterUsername;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;

@@ -30,7 +30,7 @@ namespace ChatApp
                 return instance;
             }
         }
-        private  void StartClient()
+        private void StartClient()
         {
 
             IPAddress remoteIPAddress = System.Net.IPAddress.Parse(IPAddress);
@@ -68,17 +68,34 @@ namespace ChatApp
 
         public void SendMessage(IPacket message)
         {
-            //_encProxy.Send(message.serialize());
-            //byte[] msg = Encoding.ASCII.GetBytes(message);
-            //int bytesSent = sender.Send(msg);
+            _encProxy.Send(message.serialize());
         }
-        public String ReceiveMessage()
+
+        public IPacket ReceiveMessage()
         {
-            byte[] bytes = new byte[1024];
-
-            int bytesRec = sender.Receive(bytes);
-
-            return Encoding.ASCII.GetString(bytes, 0, bytesRec);
+            byte[] size_arr = _clearProxy.Recv(3);
+            int size = (int)size_arr[0] + ((int)(size_arr[1]) << 8) + ((int)(size_arr[2]) << 16);
+            byte[] data = _encProxy.Recv(size);
+            IPacket packet;
+            switch((PacketType)data[0])
+            {
+                case PacketType.LOGIN_ACK:
+                    packet = new LoginAckPacket();
+                    break;
+                case PacketType.REGISTER_ACK:
+                    packet = new RegisterAckPacket();
+                    break;
+                case PacketType.RETREIVE_ACK:
+                    packet = new RetreiveContactAckPacket();
+                    break;
+                case PacketType.UPLOAD_PHOTO_ACK:
+                    packet = new UploadPhotoAckPacket();
+                    break;
+                default:
+                    throw new Exception("Auleu ca nu stiu ce pachet ea asta");
+            }
+            packet.deserialize(data);
+            return packet;
         }
     }
 }
