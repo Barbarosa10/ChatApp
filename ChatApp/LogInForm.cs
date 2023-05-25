@@ -62,9 +62,7 @@ namespace ChatApp
             ClientSocket.Instance.SendMessage(new RegisterPacket(RegisterUsername.Text, RegisterPassword.Text));
             RegisterAckPacket p = (RegisterAckPacket)ClientSocket.Instance.ReceiveMessage();
 
-            IPacket mesaj = ClientSocket.Instance.ReceiveMessage();
-            mesaj.execute(this);
-            
+
             if (!p.Message.Equals("OK"))
             {
                 MessageBox.Show(p.Message);
