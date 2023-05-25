@@ -16,6 +16,8 @@ namespace ChatApp
         List<Panel> listPanelMid = new List<Panel>();
         List<Panel> listPanelRight = new List<Panel>();
         Chat chat;
+        Contact logged_user;
+        MessageHandler handler = new MessageHandler();
         public ChatForm(Contact user)
         {
 
@@ -23,6 +25,7 @@ namespace ChatApp
             this.CenterToScreen();
 
             chat = new Chat(this);
+            handler.Start(chat);
             UserLabel.Text = user.Name;
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -303,7 +306,9 @@ namespace ChatApp
 
         private void InsertContactButton_Click(object sender, EventArgs e)
         {
+            //chat.ContactToAddTextBox.Text;
             chat.AddContact(ContactToAddTextBox.Text);
+            ClientSocket.Instance.SendMessage(new RetrieveContactPacket(ContactToAddTextBox.Text));
             AddContactToListView();
         }
 

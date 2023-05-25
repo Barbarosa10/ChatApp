@@ -61,7 +61,7 @@ namespace ChatApp
             listPanel[1].Visible = false;
             ClientSocket.Instance.SendMessage(new RegisterPacket(RegisterUsername.Text, RegisterPassword.Text));
             RegisterAckPacket p = (RegisterAckPacket)ClientSocket.Instance.ReceiveMessage();
-
+            
 
             if (!p.Message.Equals("OK"))
             {
