@@ -49,21 +49,21 @@ class Client:
     
     def recv(self) -> Message:
         size = self.con.recv(3)
-        while len(size) == 0:
-            size = self.con.recv(3)
-        size = int(size[0]) + int(size[1]<<8) + int(size[2]<<16)
-        enc = self.con.recv(size)
-        return decrypt(enc, self.key)
+        if len(size) == 0:
+            self.con.close()
+            del users_list[self.username]
+            raise Exception("Connection closed unexpected")
+        else:
+            size = int(size[0]) + int(size[1]<<8) + int(size[2]<<16)
+            enc = self.con.recv(size)
+            return decrypt(enc, self.key)
 
     def get_con(self) -> socket.socket:
         return self.con
 
     def init(self):
-        print("MADE IT")
         data = self.con.recv(1024)
-        print(data)
         pub_key = rsa.PublicKey.load_pkcs1_openssl_pem(data)
-        print(pub_key)
         self.key = get_random_bytes(16)
         logging.info(f"AES KEY: {self.key.hex()}")
         self.con.sendall(rsa.encrypt(self.key, pub_key))
