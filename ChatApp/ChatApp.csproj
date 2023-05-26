@@ -59,6 +59,7 @@
     <Compile Include="Contact.cs" />
     <Compile Include="Conversation.cs" />
     <Compile Include="IComms.cs" />
+    <Compile Include="LocalDatabase.cs" />
     <Compile Include="MessageHandler.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="ClientSocket.cs" />

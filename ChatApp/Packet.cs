@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +28,7 @@ namespace ChatApp
     {
         byte[] serialize();
         void deserialize(byte[] data);
-        void execute(Chat chatForm);
+        void execute(Chat chat);
     }
 
     class LoginPacket: IPacket
@@ -64,7 +66,7 @@ namespace ChatApp
             return packet;
         }
 
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -93,7 +95,7 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Message).CopyTo(data, 1);
             return data;
         }
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -137,7 +139,7 @@ namespace ChatApp
             return packet;
         }
 
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -166,7 +168,7 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Message).CopyTo(data, 1);
             return data;
         }
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -197,10 +199,19 @@ namespace ChatApp
         {
             throw new Exception("Nu ai nevoie de asta");
         }
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
+            MemoryStream ms = new MemoryStream(Picture);
+            Image bitmap = Image.FromStream(ms);
+            Bitmap image = (Bitmap)bitmap;
+            chat.LocalDatabase.UploadAvatarPhoto(image, Username);
+
+            chat.AddContact(Username);
+
+            chat.ChatForm.AddContactToListView();
+
             Console.WriteLine("Primit pachet cu poza");
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 
@@ -226,7 +237,7 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Username).CopyTo(data, 1);
             return data;
         }
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             
             return;
@@ -262,7 +273,7 @@ namespace ChatApp
             Array.Copy(Picture, 0, data, 1 + 1 + Username.Length, Picture.Length);
             return data;
         }
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -288,7 +299,7 @@ namespace ChatApp
         {
             throw new Exception("Nu ai nevoie");
         }
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();

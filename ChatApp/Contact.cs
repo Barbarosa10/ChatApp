@@ -31,11 +31,22 @@ namespace ChatApp
 
                 Console.WriteLine(path + "   \\" + name + ".jpeg");
 
-                _image = new Bitmap(path);
+                var bytes = File.ReadAllBytes(path);
+                MemoryStream ms = new MemoryStream(bytes);
+                Image bitmap = System.Drawing.Image.FromStream(ms);
+
+                _image = (Bitmap)bitmap;
+
             }
             catch (Exception exc)
             {
-                _image = new Bitmap("./../../Resources/Contacts/ProfileImages/noimage.jpeg");
+
+                var bytes = File.ReadAllBytes("./../../Resources/Contacts/ProfileImages/noimage.jpeg");
+                MemoryStream ms = new MemoryStream(bytes);
+                Image bitmap = System.Drawing.Image.FromStream(ms);
+
+                _image = (Bitmap)bitmap;
+
             }
         }
         public String Name

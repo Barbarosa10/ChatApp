@@ -13,8 +13,17 @@ namespace ChatApp
     {
         private List<Conversation> _conversations = new List<Conversation>();
         private List<Contact> _contacts = new List<Contact>();
+        private LocalDatabase _localDatabase;
         private ChatForm _chatForm;
 
+        public ChatForm ChatForm { get; set; }
+        public LocalDatabase LocalDatabase { get; set; }
+
+        public Chat(LocalDatabase localDatabase, ChatForm chatForm)
+        {
+            _chatForm = chatForm;
+            _localDatabase = localDatabase;
+        }
         public List<Conversation> Conversations
         {
             get { return _conversations; }
@@ -22,10 +31,6 @@ namespace ChatApp
         public List<Contact> Contacts
         {
             get { return _contacts; }
-        }
-        public Chat(ChatForm chatForm)
-        {
-            _chatForm = chatForm;
         }
         public Contact Contact(String name)
         {
@@ -49,14 +54,16 @@ namespace ChatApp
             }
             _contacts.Add(new Contact(username));
 
-            String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");
+            //String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");
 
-            if (content.Equals(""))
-                content += username;
-            else
-                content += "/" + username;
+            //if (content.Equals(""))
+            //    content += username;
+            //else
+            //    content += "/" + username;
 
-            File.WriteAllText("./../../Resources/Contacts/Usernames.txt", content);
+            //File.WriteAllText("./../../Resources/Contacts/Usernames.txt", content);
+
+            _localDatabase.AddContact(username);
         }
         public void RemoveContact(String username)
         {
@@ -73,25 +80,27 @@ namespace ChatApp
 
             if (check)
             {
-                String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");
-                Console.WriteLine(content);
-                Console.WriteLine(username);
-                if (content.Contains("/" + username + "/"))
-                {
-                    content = content.Replace("/" + username, "");
-                }
-                else if (content.Contains(username + "/"))
-                {
-                    content = content.Replace(username + "/", "");
-                }
-                else if (content.Contains("/" + username))
-                {
-                    content = content.Replace("/" + username, "");
-                }
-                else if (content.Equals(username))
-                    content = "";
-                Console.WriteLine(content);
-                File.WriteAllText("./../../Resources/Contacts/Usernames.txt", content);
+                //String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");
+                //Console.WriteLine(content);
+                //Console.WriteLine(username);
+                //if (content.Contains("/" + username + "/"))
+                //{
+                //    content = content.Replace("/" + username, "");
+                //}
+                //else if (content.Contains(username + "/"))
+                //{
+                //    content = content.Replace(username + "/", "");
+                //}
+                //else if (content.Contains("/" + username))
+                //{
+                //    content = content.Replace("/" + username, "");
+                //}
+                //else if (content.Equals(username))
+                //    content = "";
+                //Console.WriteLine(content);
+                //File.WriteAllText("./../../Resources/Contacts/Usernames.txt", content);
+
+                _localDatabase.RemoveContact(username);
 
                 RemoveConversation(username);
             }
@@ -116,14 +125,16 @@ namespace ChatApp
                     conversation1.Contact = contact1;
                     _conversations.Add(conversation1);
 
-                    String content = File.ReadAllText("./../../Resources/Contacts/Conversations.txt");
+                    //String content = File.ReadAllText("./../../Resources/Contacts/Conversations.txt");
 
-                    if (content.Equals(""))
-                        content += username;
-                    else
-                        content += "/" + username;
+                    //if (content.Equals(""))
+                    //    content += username;
+                    //else
+                    //    content += "/" + username;
 
-                    File.WriteAllText("./../../Resources/Contacts/Conversations.txt", content);
+                    //File.WriteAllText("./../../Resources/Contacts/Conversations.txt", content);
+
+                    _localDatabase.AddConversation(username);
 
                     break;
                 }
@@ -145,24 +156,26 @@ namespace ChatApp
 
             if (check)
             {
-                String content = File.ReadAllText("./../../Resources/Contacts/Conversations.txt");
+                //String content = File.ReadAllText("./../../Resources/Contacts/Conversations.txt");
 
-                if (content.Contains("/" + username + "/"))
-                {
-                    content = content.Replace("/" + username, "");
-                }
-                else if (content.Contains(username + "/"))
-                {
-                    content = content.Replace(username + "/", "");
-                }
-                else if (content.Contains("/" + username))
-                {
-                    content = content.Replace("/" + username, "");
-                }
-                else if (content.Equals(username))
-                    content = "";
+                //if (content.Contains("/" + username + "/"))
+                //{
+                //    content = content.Replace("/" + username, "");
+                //}
+                //else if (content.Contains(username + "/"))
+                //{
+                //    content = content.Replace(username + "/", "");
+                //}
+                //else if (content.Contains("/" + username))
+                //{
+                //    content = content.Replace("/" + username, "");
+                //}
+                //else if (content.Equals(username))
+                //    content = "";
 
-                File.WriteAllText("./../../Resources/Contacts/Conversations.txt", content);
+                //File.WriteAllText("./../../Resources/Contacts/Conversations.txt", content);
+
+                _localDatabase.RemoveConversation(username);
             }
         }
 

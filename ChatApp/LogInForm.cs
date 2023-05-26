@@ -41,8 +41,9 @@ namespace ChatApp
             {
                 MessageBox.Show(p.Message);
             }
-            else { 
-                ChatForm chatForm = new ChatForm(new Contact(UserTextBox.Text));
+            else {
+                LocalDatabase localDatabase = new LocalDatabase();
+                ChatForm chatForm = new ChatForm(new Contact(UserTextBox.Text), localDatabase);
                 this.Hide();
                 chatForm.ShowDialog();
                 this.Close();
