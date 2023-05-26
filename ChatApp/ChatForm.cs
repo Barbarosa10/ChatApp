@@ -209,6 +209,14 @@ namespace ChatApp
         {
             //RsaEncryption rsa = new RsaEncryption();
             //ClientSocket.Instance.SendMessage(rsa.ExportPublicKey());
+            SendMessagePacket packet = new SendMessagePacket
+            {
+                DestID = ConversationTopLabel.Text,
+                SenderID = logged_user.Name,
+                Message = MessageToBeSentBox.Text
+            };
+            Console.WriteLine("Sendind message to " + packet.SenderID + " : " + packet.Message);
+            ClientSocket.Instance.SendMessage(packet);
 
         }
 

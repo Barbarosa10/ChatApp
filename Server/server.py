@@ -13,7 +13,7 @@ import traceback
 from bson.binary import Binary
 
 
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 MONGO_USERNAME = "admin"
 MONGO_PASSWORD = "admin"
 MONGO_URI = f"mongodb+srv://{MONGO_USERNAME}:{MONGO_PASSWORD}@cluster.usyyx.mongodb.net/?retryWrites=true&w=majority"
@@ -87,14 +87,12 @@ def register(user:str, password:str) -> str:
         return ""
 
 def get_conv_id(user1: str, user2:str) -> str:
-    conv_id = db.conversations.find_one({"participants": {"$all": [user1, user2]}}).get("_id")
+    conv_id = db.conversations.find_one({"participants": {"$all": [user1, user2]}})
     if conv_id == None:
-        conv_id = db.conversations.insert_one({"participants":[user1, user2]}).get("_id")
-    return conv_id
+        return db.conversations.insert_one({"participants":[user1, user2]}).inserted_id
+    return conv_id.get("_id")
 
 def add_message(sender_id: bytes, dest_id: bytes, msg:bytes) -> str:
-    sender_id = sender_id.decode("utf-8")
-    dest_id = dest_id.decode("utf-8")
     msg = msg.decode("utf-8")
     conv_id = get_conv_id(sender_id, dest_id)
     logging.info(f"CONVERSATION: {conv_id}")
@@ -143,8 +141,10 @@ def client_handler(conn):
             
             elif msg.get_msg_type() == "SEND_MESSAGE":
                 sender_id, dest_id, mess = msg.get_message()
+                sender_id = sender_id.decode()
+                dest_id = dest_id.decode()
                 to_send = Message("SEND_ACK")
-
+                logging.debug(f"users_list: {users_list}")
                 if(dest_id in users_list):
                     
                     if(sender_id != client.username):
@@ -155,7 +155,7 @@ def client_handler(conn):
                         add_message(sender_id, dest_id, mess)
                         logging.info(f"Sending message from {sender_id} to {dest_id}")
                         users_list[dest_id].send(msg)
-                        to_send.set_ack_msg("OK")
+                        to_send.set_ack_msg(dest_id)
                 
                 else:
                     to_send.set_error_msg("Server error")
