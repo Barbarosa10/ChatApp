@@ -85,11 +85,17 @@ namespace ChatApp
                 case PacketType.REGISTER_ACK:
                     packet = new RegisterAckPacket();
                     break;
-                case PacketType.RETREIVE_ACK:
-                    packet = new RetreiveContactAckPacket();
+                case PacketType.RETRIEVE_ACK:
+                    packet = new RetrieveContactAckPacket();
                     break;
                 case PacketType.UPLOAD_PHOTO_ACK:
                     packet = new UploadPhotoAckPacket();
+                    break;
+                case PacketType.SEND_MESSAGE:
+                    packet = new SendMessagePacket();
+                    break;
+                case PacketType.SEND_ACK:
+                    packet = new SendMessageAckPacket();
                     break;
                 default:
                     throw new Exception("Auleu ca nu stiu ce pachet ea asta");

@@ -66,6 +66,7 @@ class Message:
         return self.raw[1:]
 
     def get_message(self) -> (bytes, bytes, bytes):
+        print(self.raw.hex())
         sender_id, dest_id, msg = self.raw[1:].split(b"\x00")
         return sender_id, dest_id, msg
     

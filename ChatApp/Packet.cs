@@ -14,8 +14,8 @@ namespace ChatApp
         REGISTER_ACK,
         SEND_MESSAGE,
         SEND_ACK,
-        RETREIVE_CONTACT,
-        RETREIVE_ACK,
+        RETRIEVE_CONTACT,
+        RETRIEVE_ACK,
         UPLOAD_PHOTO,
         UPLOAD_PHOTO_ACK,
         ERROR
@@ -173,24 +173,40 @@ namespace ChatApp
         }
     }
 
-    class RetreiveContactAckPacket : IPacket
+    class RetrieveContactAckPacket : IPacket
     {
+        
+        /// <summary>
+        /// The username for the picture if it exists, null if it doesn't
+        /// </summary>
         public string Username { get; set; }
+        /// <summary>
+        /// The picture if it exsists, null if it doesn't
+        /// </summary>
         public byte[] Picture { get; set; }
-        public RetreiveContactAckPacket(string username, byte[] pict)
+        public RetrieveContactAckPacket(string username, byte[] pict)
         {
             Picture = (byte[])pict.Clone();
             Username = username;
         }
 
-        public RetreiveContactAckPacket() { }
+        public RetrieveContactAckPacket() { }
 
         public void deserialize(byte[] data)
         {
             int username_len = Array.IndexOf(data, 0);
-            Username = Encoding.UTF8.GetString(data.Take(username_len).ToArray());
-            Picture = new byte[data.Length - username_len - 1];
-            Array.Copy(data, username_len + 1, Picture, 0, data.Length - username_len - 1);
+            if (username_len == -1)
+            {
+                Username = null;
+                Picture = null;
+            }
+            else
+            {
+                data = data.Skip(1).ToArray();
+                Username = Encoding.UTF8.GetString(data.Take(username_len).ToArray());
+                Picture = new byte[data.Length - username_len - 1];
+                Array.Copy(data, username_len + 1, Picture, 0, data.Length - username_len - 1);
+            }
         }
 
         public byte[] serialize()
@@ -216,13 +232,13 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
-            Username = Encoding.UTF8.GetString(data);
+            Username = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
         public byte[] serialize()
         {
             byte[] data = new byte[Username.Length + 1];
-            data[0] = (byte)PacketType.RETREIVE_CONTACT;
+            data[0] = (byte)PacketType.RETRIEVE_CONTACT;
             Encoding.UTF8.GetBytes(Username).CopyTo(data, 1);
             return data;
         }
@@ -247,7 +263,8 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
-            int username_len = Array.IndexOf(data, 0);
+            data = data.Skip(1).ToArray();
+            int username_len = Array.IndexOf(data, (byte)0);
             Username = Encoding.UTF8.GetString(data.Take(username_len).ToArray());
             Picture = new byte[data.Length - username_len - 1];
             Array.Copy(data, username_len + 1, Picture, 0, data.Length - username_len - 1);
@@ -293,6 +310,64 @@ namespace ChatApp
             //throw new NotImplementedException();
         }
     }
+
+    class SendMessagePacket : IPacket
+    {
+        public string SenderID { get; set; }
+        public string DestID { get; set; }
+        public string Message { get; set; }
+        public void deserialize(byte[] data)
+        {
+            data = data.Skip(1).ToArray();
+            int sender_len = Array.IndexOf(data, (byte)0);
+            SenderID = Encoding.UTF8.GetString(data.Take(sender_len).ToArray());
+            int dest_len = Array.IndexOf(data, (byte)0, sender_len);
+            Message = Encoding.UTF8.GetString(data.Skip(sender_len + dest_len + 2).ToArray());
+        }
+
+        public void execute(Chat chatForm)
+        {
+            Console.WriteLine("Mesaj primit: " + Message);
+            //throw new NotImplementedException();
+        }
+
+        public byte[] serialize()
+        {
+            byte[] data = new byte[1 + 2 + SenderID.Length + DestID.Length + Message.Length];
+            data[0] = (byte)PacketType.SEND_MESSAGE;
+            Encoding.UTF8.GetBytes(SenderID).CopyTo(data, 1);
+            data[SenderID.Length + 1] = 0;
+            Array.Copy(Encoding.UTF8.GetBytes(SenderID), 0, data, SenderID.Length + 2, SenderID.Length);
+            data[SenderID.Length + DestID.Length + 2] = 0;
+            Array.Copy(Encoding.UTF8.GetBytes(Message), 0, data, SenderID.Length + DestID.Length + 3, Message.Length);
+            return data;
+        }
+    }
+
+    class SendMessageAckPacket : IPacket
+    {
+
+        /// <summary>
+        /// Daca a fost primit corect, returneaza ID-ul destinatiei. Daca nu, un mesaj de eroare
+        /// </summary>
+        public string DestID_Or_Error { get; set; }
+        public void deserialize(byte[] data)
+        {
+            DestID_Or_Error = Encoding.UTF8.GetString(data.Skip(1).ToArray());
+        }
+
+        public void execute(Chat chatForm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] serialize()
+        {
+            throw new Exception("Nu ai nevoie");
+        }
+    }
+
+
     static class Packet
     {
         static byte _type;
