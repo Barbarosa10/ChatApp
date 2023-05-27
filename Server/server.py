@@ -3,6 +3,7 @@ from hashlib import sha256
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.errors import DuplicateKeyError
+from pymongo import DESCENDING
 from comm import *
 from multiprocessing.pool import ThreadPool
 import sys
@@ -11,6 +12,7 @@ import logging
 from time import time
 import traceback
 from bson.binary import Binary
+from bson.json_util import dumps
 
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
@@ -92,7 +94,7 @@ def get_conv_id(user1: str, user2:str) -> str:
         return db.conversations.insert_one({"participants":[user1, user2]}).inserted_id
     return conv_id.get("_id")
 
-def add_message(sender_id: bytes, dest_id: bytes, msg:bytes) -> str:
+def add_message(sender_id: str, dest_id: str, msg:bytes) -> str:
     msg = msg.decode("utf-8")
     conv_id = get_conv_id(sender_id, dest_id)
     logging.info(f"CONVERSATION: {conv_id}")
@@ -106,9 +108,13 @@ def get_contact_profile(username: bytes) -> bytes:
 
     return user.profile_picture
 
+def get_n_messages(user1: str, user2: str, n:int) -> []:
+    messages = db.messages
+    conv_id = get_conv_id(user1, user2)
+    return dumps(messages.find({"conversation_id":conv_id}, {"_id":0, "conversation_id":0}, sort=[('_id', DESCENDING)]).limit(10))
+
 def upload_photo_to_profile(username: bytes, photo:bytes):
     db.users.update_one({"username":username.decode("utf-8")}, {"$set": {"profile_picture":Binary(photo)}})
-
 
 def client_handler(conn):
     client = Client(conn)
@@ -176,7 +182,15 @@ def client_handler(conn):
                 upload_photo_to_profile(username, pict)
                 to_send = Message("UPLOAD_PROFILE_ACK")
                 to_send.set_ack_msg("OK")
-                
+
+            elif msg.get_msg_type() == "GET_MESSAGES":
+                user1, user2 = msg.get_conv_parts()
+                user1 = user1.decode()
+                user2 = user2.decode()
+                to_send = Message("GET_MESSAGES_ACK")
+                messages = get_n_messages(user1, user2, 10)
+                print(messages)
+                to_send.set_ack_msg(messages)
 
             client.send(to_send)
         except Exception as e:

@@ -112,6 +112,7 @@ namespace ChatApp
             // ChatMainPanel
             // 
             this.ChatMainPanel.BackColor = System.Drawing.Color.Black;
+            this.ChatMainPanel.Controls.Add(this.ConversationsSidePanel);
             this.ChatMainPanel.Controls.Add(this.ConversationPanel);
             this.ChatMainPanel.Controls.Add(this.ConversationMainPanel);
             this.ChatMainPanel.Controls.Add(this.AddContactsPanel);
@@ -120,7 +121,6 @@ namespace ChatApp
             this.ChatMainPanel.Controls.Add(this.ProfileSidePanel);
             this.ChatMainPanel.Controls.Add(this.ProfilePanel);
             this.ChatMainPanel.Controls.Add(this.SettingsPanel);
-            this.ChatMainPanel.Controls.Add(this.ConversationsSidePanel);
             this.ChatMainPanel.Controls.Add(this.AddConversationPanel);
             this.ChatMainPanel.Controls.Add(this.ContactsSidePanel);
             this.ChatMainPanel.Controls.Add(this.SettingsSidePanel);
@@ -508,6 +508,7 @@ namespace ChatApp
             this.ConversationsListView.Size = new System.Drawing.Size(154, 416);
             this.ConversationsListView.TabIndex = 1;
             this.ConversationsListView.UseCompatibleStateImageBehavior = false;
+            this.ConversationsListView.SelectedIndexChanged += new System.EventHandler(this.ConversationsListView_SelectedIndexChanged);
             // 
             // AddConversationPanel
             // 

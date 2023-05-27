@@ -45,7 +45,6 @@ namespace ChatApp
         private byte[] key;
         int nonceLength = 12;
         int tagLength = 16;
-        byte[] adata = new byte[0];
         public EncComms(Socket socket)
         {
             s = socket;

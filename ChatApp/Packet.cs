@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ChatApp
 {
@@ -20,6 +21,8 @@ namespace ChatApp
         RETRIEVE_ACK,
         UPLOAD_PHOTO,
         UPLOAD_PHOTO_ACK,
+        GET_CONVERSATION,
+        GET_CONVERSATION_ACK,
         ERROR
     }
 
@@ -376,6 +379,57 @@ namespace ChatApp
         public byte[] serialize()
         {
             throw new Exception("Nu ai nevoie");
+        }
+    }
+
+    class GetNMessagesPacket : IPacket
+    {
+        public string User1 { get; set; }
+        public string User2 { get; set; }
+        public void deserialize(byte[] data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void execute(Chat chatForm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] serialize()
+        {
+            byte[] data = new byte[User1.Length + User2.Length + 2];
+            data[0] = (byte)PacketType.GET_CONVERSATION;
+            Array.Copy(Encoding.UTF8.GetBytes(User1), 0, data, 1, User1.Length);
+            data[User1.Length + 1] = 0;
+            Array.Copy(Encoding.UTF8.GetBytes(User2), 0, data, 2 + User1.Length, User2.Length);
+            return data;
+        }
+    }
+
+    class GetNMessagesAckPacket : IPacket
+    {
+        public List<ServerMessage> Messages { get; set; }
+        public class ServerMessage
+        {
+            public string sender_id { get; set; }
+            public string content { get; set; }
+            public string timestamp { get; set; }
+        }
+        public void deserialize(byte[] data)
+        {
+            data = data.Skip(1).ToArray();
+            Messages = JsonConvert.DeserializeObject<List<ServerMessage>>(Encoding.UTF8.GetString(data))
+        }
+
+        public void execute(Chat chatForm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] serialize()
+        {
+            throw new NotImplementedException();
         }
     }
 

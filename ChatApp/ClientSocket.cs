@@ -97,6 +97,10 @@ namespace ChatApp
                 case PacketType.SEND_ACK:
                     packet = new SendMessageAckPacket();
                     break;
+                case PacketType.GET_CONVERSATION_ACK:
+                    packet = new GetNMessagesAckPacket();
+                    break;
+
                 default:
                     throw new Exception("Auleu ca nu stiu ce pachet ea asta");
             }

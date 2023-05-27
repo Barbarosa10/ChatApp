@@ -14,7 +14,9 @@ msg_type = {
     7: "RETRIEVE_CONTACT_ACK",
     8: "UPLOAD_PROFILE_PHOTO",
     9: "UPLOAD_PROFILE_ACK",
-    10: "ERROR"
+    10: "GET_MESSAGES",
+    11: "GET_MESSAGES_ACK",
+    12: "ERROR"
 }
 
 class Message:
@@ -72,6 +74,9 @@ class Message:
     
     def get_public_key(self) -> bytes:
         return PublicKey.load_pkcs1(self.raw[1:])
+
+    def get_conv_parts(self) -> (bytes, bytes):
+        return self.raw[1:].split(b"\x00")
     
     def get_raw(self):
         return self.raw
