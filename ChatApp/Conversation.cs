@@ -17,17 +17,11 @@ namespace ChatApp
         private Dictionary<String, SimpleMessage> _fullMessage = new Dictionary<String, SimpleMessage>();
 
         public Contact Contact { get; set; }
+        public Dictionary<String, SimpleMessage> Message { get; set; }
         public Conversation()
         {
         }
-        public Conversation(Contact contact)
-        {
-            _contact = contact;
-        }
-        public Dictionary<String, SimpleMessage> Message
-        {
-            get {return _fullMessage; }
-        }
+
         public void addMessage(String timestamp, String username, String message)
         {
             _fullMessage.Add(timestamp, new SimpleMessage() {username = username, message = message });

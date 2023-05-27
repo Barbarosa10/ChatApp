@@ -69,6 +69,11 @@ namespace ChatApp
             ConversationsListView.MouseMove += ConversationListView_MouseMove;
             ConversationsListView.MouseClick += ConversationListView_MouseClick;
             chat.LoadConversations();
+
+            ConversationWithMessagesListView.OwnerDraw = true;
+            ConversationWithMessagesListView.DrawItem += ConversationListView_DrawItem;
+            //ConversationWithMessagesListView.MouseMove += ConversationListView_MouseMove;
+            //ConversationWithMessagesListView.MouseClick += ConversationListView_MouseClick;
         }
 
         private void ConversationListView_MouseClick(object sender, MouseEventArgs e)
@@ -83,6 +88,7 @@ namespace ChatApp
                 ConversationTopAvatarPictureBox.Image = contact.Image;
                 ConversationTopLabel.Text = contact.Name;
             }
+            AddMessagesToListView(contact.Name);
 
         }
         private void ConversationListView_MouseMove(object sender, MouseEventArgs e)
@@ -190,6 +196,23 @@ namespace ChatApp
 
             Rectangle textBounds = new Rectangle(e.Bounds.Left + ContactsListView.SmallImageList.ImageSize.Width, e.Bounds.Top + ContactsListView.SmallImageList.ImageSize.Height / 3, e.Bounds.Width - ContactsListView.SmallImageList.ImageSize.Width, e.Bounds.Height);
             TextRenderer.DrawText(e.Graphics, e.Item.Text, ContactsListView.Font, textBounds, color, TextFormatFlags.Left);
+        }
+
+        private void ConversationWithMessagesListView_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            Color color = Color.White;
+
+            // Desenează textul elementului
+            if (e.Item.ImageIndex >= 0)
+            {
+                Image image = ConversationWithMessagesListView.SmallImageList.Images[e.Item.ImageIndex];
+                e.Graphics.DrawImage(image, e.Bounds.Left, e.Bounds.Top);
+            }
+
+            Rectangle textBounds = new Rectangle(e.Bounds.Left + ConversationWithMessagesListView.SmallImageList.ImageSize.Width, e.Bounds.Top + ConversationsListView.SmallImageList.ImageSize.Height / 3, e.Bounds.Width - ConversationsListView.SmallImageList.ImageSize.Width, e.Bounds.Height);
+
+            //if (ConversationWithMessagesListView.Items.)
+            TextRenderer.DrawText(e.Graphics, e.Item.Text, ConversationWithMessagesListView.Font, textBounds, color, TextFormatFlags.Left);
         }
 
         private void LogoutButton_Click(object sender, EventArgs e)
@@ -417,6 +440,31 @@ namespace ChatApp
         {
             chat.RemoveConversation(ConversationTopLabel.Text);
             AddConversationsToListView();
+        }
+
+        public void AddMessagesToListView(String username)
+        {
+            ConversationWithMessagesListView.Clear();
+
+            ConversationWithMessagesListView.Columns.Add("Timestamp", 132);
+            ConversationWithMessagesListView.Columns.Add("Message", 300);
+            ImageList image = new ImageList();
+            image.ImageSize = new Size(40, 40);
+
+            Conversation conversation = chat.GetConversation(username);
+
+            int i = 0;
+            foreach(String timestamp in conversation.Message.Keys)
+            {
+                image.Images.Add(chat.Conversations[i++].Contact.Image);
+
+                ListViewItem item = new ListViewItem(timestamp);
+                item.SubItems.Add(conversation.Message[timestamp].message);
+                ConversationWithMessagesListView.Items.Add(item);
+            }
+
+
+            ConversationWithMessagesListView.SmallImageList = image;
         }
     }
 }

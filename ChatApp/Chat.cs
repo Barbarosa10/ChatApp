@@ -19,6 +19,16 @@ namespace ChatApp
         public ChatForm ChatForm { get; set; }
         public LocalDatabase LocalDatabase { get; set; }
 
+        public  Conversation GetConversation(String username)
+        {
+            foreach(Conversation conversation in _conversations)
+            {
+                if (conversation.Contact.Name == username)
+                    return conversation;
+            }
+            return null;
+        }
+
         public Chat(LocalDatabase localDatabase, ChatForm chatForm)
         {
             _chatForm = chatForm;
@@ -221,6 +231,15 @@ namespace ChatApp
                 {
                     MessageBox.Show(exc.Message);
                 }
+            }
+        }
+        public void LoadMessages(String username, String timestamp, String message)
+        {
+            Conversation conversation = GetConversation(username);
+
+            if (conversation != null)
+            {
+                conversation.addMessage(timestamp, username, message);
             }
         }
     }
