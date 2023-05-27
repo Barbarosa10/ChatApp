@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,22 +19,24 @@ namespace ChatApp
         Chat chat;
         Contact logged_user;
         MessageHandler handler = new MessageHandler();
-        public ChatForm(Contact user)
+        LocalDatabase _localDatabase;
+        public ChatForm(Contact user, LocalDatabase localDatabase)
         {
 
             InitializeComponent();
             this.CenterToScreen();
-
-            chat = new Chat(this);
+            _localDatabase = localDatabase;
+            chat = new Chat(_localDatabase, this);
             handler.Start(chat);
             UserLabel.Text = user.Name;
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
-            AvatarPictureBoxProfile.Image = user.Image;
-            AvatarPictureBoxSettings.Image = user.Image;
+
             logged_user = user;
+            AvatarPictureBoxProfile.Image = logged_user.Image;
+            AvatarPictureBoxSettings.Image = logged_user.Image;
 
             listPanelRight.Add(ProfilePanel);
             listPanelRight.Add(ContactsPanel);
@@ -225,6 +228,8 @@ namespace ChatApp
 
         private void ProfileButton_Click(object sender, EventArgs e)
         {
+            AvatarPictureBoxProfile.Image = logged_user.Image;
+
             ProfileButton.BackColor = Color.DarkGray;
             ProfileButton.ForeColor = Color.Black;
             ContactsButton.BackColor = Color.Black;
@@ -236,6 +241,7 @@ namespace ChatApp
 
             EnableDisableRightPanel(true, false, false, false, false, false, false, false);
             EnableDisableLeftPanel(true, false, false, false);
+
         }
 
         private void ContactsButton_Click(object sender, EventArgs e)
@@ -282,6 +288,8 @@ namespace ChatApp
 
         private void SettingsButton_Click(object sender, EventArgs e)
         {
+            //AvatarPictureBoxSettings.Image = logged_user.Image;
+
             ProfileButton.BackColor = Color.Black;
             ProfileButton.ForeColor = Color.Silver;
             ContactsButton.BackColor = Color.Black;
@@ -293,6 +301,7 @@ namespace ChatApp
 
             EnableDisableRightPanel(false, false, false, true, false, false, false, false);
             EnableDisableLeftPanel(false, false, false, true);
+
         }
 
         private void LoadAvatarButton_Click_1(object sender, EventArgs e)
@@ -304,9 +313,15 @@ namespace ChatApp
             if (open.ShowDialog() == DialogResult.OK)
             {
                 // display image in picture box  
-                AvatarPictureBoxProfile.Image = new Bitmap(open.FileName);
-                AvatarPictureBoxSettings.Image = new Bitmap(open.FileName);
+                Bitmap image = new Bitmap(open.FileName);
+
+                AvatarPictureBoxProfile.Image = image;
+                AvatarPictureBoxSettings.Image = image;
+                logged_user.Image = image;
+
+                _localDatabase.UploadAvatarPhoto(image, logged_user.Name);
             }
+
             byte[] img;
             using (MemoryStream stream = new MemoryStream())
             {
@@ -328,10 +343,9 @@ namespace ChatApp
 
         private void InsertContactButton_Click(object sender, EventArgs e)
         {
-            //chat.ContactToAddTextBox.Text;
-            chat.AddContact(ContactToAddTextBox.Text);
+
             ClientSocket.Instance.SendMessage(new RetrieveContactPacket(ContactToAddTextBox.Text));
-            AddContactToListView();
+
         }
 
         private void AddConversationButton_Click(object sender, EventArgs e)

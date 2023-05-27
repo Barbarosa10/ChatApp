@@ -81,6 +81,7 @@ namespace ChatApp
             this.ContactsButton = new System.Windows.Forms.Button();
             this.ConversationButton = new System.Windows.Forms.Button();
             this.ProfileButton = new System.Windows.Forms.Button();
+            this.ConversationWithMessagesListView = new System.Windows.Forms.ListView();
             this.ChatMainPanel.SuspendLayout();
             this.ConversationPanel.SuspendLayout();
             this.TopConversationPanel.SuspendLayout();
@@ -96,6 +97,10 @@ namespace ChatApp
             ((System.ComponentModel.ISupportInitialize)(this.AvatarPictureBoxProfile)).BeginInit();
             this.ProfilePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.ConversationPanel.SuspendLayout();
+            this.ConversationWithMessagesPanel.SuspendLayout();
+            this.TopConversationPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ConversationTopAvatarPictureBox)).BeginInit();
             this.SettingsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.ConversationsSidePanel.SuspendLayout();
@@ -422,6 +427,105 @@ namespace ChatApp
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
             // 
+            // ConversationPanel
+            // 
+            this.ConversationPanel.BackColor = System.Drawing.Color.Black;
+            this.ConversationPanel.Controls.Add(this.ConversationWithMessagesPanel);
+            this.ConversationPanel.Controls.Add(this.TopConversationPanel);
+            this.ConversationPanel.Controls.Add(this.MessageToBeSentBox);
+            this.ConversationPanel.Controls.Add(this.sendButton);
+            this.ConversationPanel.Location = new System.Drawing.Point(266, 0);
+            this.ConversationPanel.Name = "ConversationPanel";
+            this.ConversationPanel.Size = new System.Drawing.Size(722, 508);
+            this.ConversationPanel.TabIndex = 2;
+            // 
+            // ConversationWithMessagesPanel
+            // 
+            this.ConversationWithMessagesPanel.BackColor = System.Drawing.Color.Black;
+            this.ConversationWithMessagesPanel.Controls.Add(this.ConversationWithMessagesListView);
+            this.ConversationWithMessagesPanel.Location = new System.Drawing.Point(-2, 48);
+            this.ConversationWithMessagesPanel.Name = "ConversationWithMessagesPanel";
+            this.ConversationWithMessagesPanel.Size = new System.Drawing.Size(724, 423);
+            this.ConversationWithMessagesPanel.TabIndex = 3;
+            // 
+            // TopConversationPanel
+            // 
+            this.TopConversationPanel.BackColor = System.Drawing.Color.DarkBlue;
+            this.TopConversationPanel.Controls.Add(this.ConversationTopLabel);
+            this.TopConversationPanel.Controls.Add(this.ConversationTopAvatarPictureBox);
+            this.TopConversationPanel.Controls.Add(this.DeleteConversationButton);
+            this.TopConversationPanel.Location = new System.Drawing.Point(-2, 1);
+            this.TopConversationPanel.Name = "TopConversationPanel";
+            this.TopConversationPanel.Size = new System.Drawing.Size(725, 48);
+            this.TopConversationPanel.TabIndex = 2;
+            // 
+            // ConversationTopLabel
+            // 
+            this.ConversationTopLabel.BackColor = System.Drawing.Color.Transparent;
+            this.ConversationTopLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConversationTopLabel.ForeColor = System.Drawing.Color.Gray;
+            this.ConversationTopLabel.Location = new System.Drawing.Point(59, 14);
+            this.ConversationTopLabel.Name = "ConversationTopLabel";
+            this.ConversationTopLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.ConversationTopLabel.Size = new System.Drawing.Size(112, 20);
+            this.ConversationTopLabel.TabIndex = 3;
+            this.ConversationTopLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConversationTopAvatarPictureBox
+            // 
+            this.ConversationTopAvatarPictureBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ConversationTopAvatarPictureBox.Location = new System.Drawing.Point(0, 1);
+            this.ConversationTopAvatarPictureBox.Name = "ConversationTopAvatarPictureBox";
+            this.ConversationTopAvatarPictureBox.Size = new System.Drawing.Size(57, 47);
+            this.ConversationTopAvatarPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ConversationTopAvatarPictureBox.TabIndex = 3;
+            this.ConversationTopAvatarPictureBox.TabStop = false;
+            // 
+            // DeleteConversationButton
+            // 
+            this.DeleteConversationButton.BackColor = System.Drawing.Color.Transparent;
+            this.DeleteConversationButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.DeleteConversationButton.FlatAppearance.BorderSize = 0;
+            this.DeleteConversationButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteConversationButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeleteConversationButton.ForeColor = System.Drawing.Color.Silver;
+            this.DeleteConversationButton.Image = ((System.Drawing.Image)(resources.GetObject("DeleteConversationButton.Image")));
+            this.DeleteConversationButton.Location = new System.Drawing.Point(647, 1);
+            this.DeleteConversationButton.Name = "DeleteConversationButton";
+            this.DeleteConversationButton.Size = new System.Drawing.Size(77, 47);
+            this.DeleteConversationButton.TabIndex = 12;
+            this.DeleteConversationButton.UseVisualStyleBackColor = false;
+            this.DeleteConversationButton.Click += new System.EventHandler(this.DeleteConversationButton_Click);
+            // 
+            // MessageToBeSentBox
+            // 
+            this.MessageToBeSentBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.MessageToBeSentBox.BackColor = System.Drawing.Color.White;
+            this.MessageToBeSentBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MessageToBeSentBox.Location = new System.Drawing.Point(-2, 467);
+            this.MessageToBeSentBox.Multiline = true;
+            this.MessageToBeSentBox.Name = "MessageToBeSentBox";
+            this.MessageToBeSentBox.Size = new System.Drawing.Size(647, 41);
+            this.MessageToBeSentBox.TabIndex = 0;
+            // 
+            // sendButton
+            // 
+            this.sendButton.BackColor = System.Drawing.Color.Black;
+            this.sendButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.sendButton.FlatAppearance.BorderSize = 0;
+            this.sendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.sendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sendButton.ForeColor = System.Drawing.Color.Silver;
+            this.sendButton.Image = ((System.Drawing.Image)(resources.GetObject("sendButton.Image")));
+            this.sendButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.sendButton.Location = new System.Drawing.Point(643, 467);
+            this.sendButton.Name = "sendButton";
+            this.sendButton.Size = new System.Drawing.Size(79, 43);
+            this.sendButton.TabIndex = 1;
+            this.sendButton.UseVisualStyleBackColor = false;
+            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
+            // 
             // SettingsPanel
             // 
             this.SettingsPanel.BackColor = System.Drawing.Color.Black;
@@ -733,6 +837,16 @@ namespace ChatApp
             this.ProfileButton.UseVisualStyleBackColor = false;
             this.ProfileButton.Click += new System.EventHandler(this.ProfileButton_Click);
             // 
+            // ConversationWithMessagesListView
+            // 
+            this.ConversationWithMessagesListView.BackColor = System.Drawing.Color.Black;
+            this.ConversationWithMessagesListView.HideSelection = false;
+            this.ConversationWithMessagesListView.Location = new System.Drawing.Point(1, 0);
+            this.ConversationWithMessagesListView.Name = "ConversationWithMessagesListView";
+            this.ConversationWithMessagesListView.Size = new System.Drawing.Size(724, 423);
+            this.ConversationWithMessagesListView.TabIndex = 0;
+            this.ConversationWithMessagesListView.UseCompatibleStateImageBehavior = false;
+            // 
             // ChatForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -760,6 +874,11 @@ namespace ChatApp
             ((System.ComponentModel.ISupportInitialize)(this.AvatarPictureBoxProfile)).EndInit();
             this.ProfilePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.ConversationPanel.ResumeLayout(false);
+            this.ConversationPanel.PerformLayout();
+            this.ConversationWithMessagesPanel.ResumeLayout(false);
+            this.TopConversationPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ConversationTopAvatarPictureBox)).EndInit();
             this.SettingsPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ConversationsSidePanel.ResumeLayout(false);
@@ -827,5 +946,6 @@ namespace ChatApp
         private System.Windows.Forms.Button DeleteContactButton;
         private System.Windows.Forms.Panel ConversationMainPanel;
         private System.Windows.Forms.PictureBox pictureBox5;
+        private System.Windows.Forms.ListView ConversationWithMessagesListView;
     }
 }
