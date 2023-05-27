@@ -144,6 +144,12 @@ namespace ChatApp
                 ContactAvatarPictureBox.Image = contact.Image;
                 ContactLabel.Text = contact.Name;
             }
+
+            GetNMessagesPacket packet = new GetNMessagesPacket();
+            packet.User1 = logged_user.Name;
+            packet.User2 = contact.Name;
+
+            ClientSocket.Instance.SendMessage(packet);
             //ContactAvatarPictureBox.Image = ContactsListView.SmallImageList.Images[item.Index];
             //ContactLabel.Text = item.Text;
 
@@ -403,6 +409,11 @@ namespace ChatApp
         {
             chat.RemoveConversation(ConversationTopLabel.Text);
             AddConversationsToListView();
+        }
+
+        private void ConversationsListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
