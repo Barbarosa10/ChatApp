@@ -67,7 +67,6 @@ class Client:
         data = self.con.recv(1024)
         pub_key = rsa.PublicKey.load_pkcs1_openssl_pem(data)
         self.key = get_random_bytes(16)
-        logging.info(f"AES KEY: {self.key.hex()}")
         self.con.sendall(rsa.encrypt(self.key, pub_key))
 
 
@@ -100,13 +99,12 @@ def add_message(sender_id: str, dest_id: str, msg:bytes) -> str:
     logging.info(f"CONVERSATION: {conv_id}")
     db.messages.insert_one({"conversation_id":conv_id, "sender_id":sender_id, "content":msg, "timestamp":str(int(time()))})
 
-def get_contact_profile(username: bytes) -> bytes:
-    users = db.users
-    user = users.find_one({"username":user})
+def get_contact_profile(username: str) -> bytes:
+    user = db.users.find_one({"username":username})
     if user == None:
         raise Exception("No username")
 
-    return user.profile_picture
+    return user.get("profile_picture")
 
 def get_n_messages(user1: str, user2: str, n:int) -> []:
     messages = db.messages
@@ -171,9 +169,10 @@ def client_handler(conn):
                 username = msg.get_username()
                 to_send = Message("RETRIEVE_CONTACT_ACK")
                 try:
-                    pict = get_contact_profile(username.encode("utf-8"))
+                    pict = get_contact_profile(username.decode())
                     to_send.set_username_and_picture(username, pict)
-                except:
+                except Exception as e:
+                    logging.error(e)
                     to_send.set_error_msg("No user with that username")
 
             elif msg.get_msg_type() == "UPLOAD_PROFILE_PHOTO":
@@ -189,7 +188,6 @@ def client_handler(conn):
                 user2 = user2.decode()
                 to_send = Message("GET_MESSAGES_ACK")
                 messages = get_n_messages(user1, user2, 10)
-                print(messages)
                 to_send.set_ack_msg(messages)
 
             client.send(to_send)

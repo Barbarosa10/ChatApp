@@ -30,6 +30,13 @@ namespace ChatApp
                 return instance;
             }
         }
+
+        public void CloseSocket()
+        {
+            sender.Shutdown(SocketShutdown.Both);
+            sender.Close();
+            instance = null;
+        }
         private void StartClient()
         {
 

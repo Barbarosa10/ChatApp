@@ -200,6 +200,8 @@ namespace ChatApp
 
         private void LogoutButton_Click(object sender, EventArgs e)
         {
+            handler.Stop();
+            ClientSocket.Instance.CloseSocket();
             LogInForm loginForm = new LogInForm();
             this.Hide();
             loginForm.ShowDialog();

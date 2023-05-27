@@ -48,7 +48,7 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
-            int username_len = Array.IndexOf(data, 0);
+            int username_len = Array.IndexOf(data, (byte)0);
             byte[] username = new byte[username_len-1];
             Array.Copy(data, 1, username,0, username_len);
 
@@ -121,7 +121,7 @@ namespace ChatApp
         public void deserialize(byte[] data)
         {
 
-            int username_len = Array.IndexOf(data, 0);
+            int username_len = Array.IndexOf(data, (byte)0);
             byte[] username = new byte[username_len - 1];
             Array.Copy(data, 1, username, 0, username_len);
 
@@ -199,7 +199,7 @@ namespace ChatApp
 
         public void deserialize(byte[] data)
         {
-            int username_len = Array.IndexOf(data, 0);
+            int username_len = Array.IndexOf(data, (byte)0);
             if (username_len == -1)
             {
                 Username = null;
@@ -208,9 +208,9 @@ namespace ChatApp
             else
             {
                 data = data.Skip(1).ToArray();
-                Username = Encoding.UTF8.GetString(data.Take(username_len).ToArray());
-                Picture = new byte[data.Length - username_len - 1];
-                Array.Copy(data, username_len + 1, Picture, 0, data.Length - username_len - 1);
+                Username = Encoding.UTF8.GetString(data.Take(username_len-1).ToArray());
+                Picture = new byte[data.Length - username_len];
+                Array.Copy(data, username_len, Picture, 0, data.Length - username_len);
             }
         }
 
@@ -419,7 +419,7 @@ namespace ChatApp
         public void deserialize(byte[] data)
         {
             data = data.Skip(1).ToArray();
-            Messages = JsonConvert.DeserializeObject<List<ServerMessage>>(Encoding.UTF8.GetString(data))
+            Messages = JsonConvert.DeserializeObject<List<ServerMessage>>(Encoding.UTF8.GetString(data));
         }
 
         public void execute(Chat chatForm)

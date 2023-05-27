@@ -64,11 +64,10 @@ class Message:
         user, password = self.raw[1:].split(b"\x00")       
         return user.decode("utf-8"), password.decode("utf-8")
     
-    def get_username(self) -> str:
+    def get_username(self) -> bytes:
         return self.raw[1:]
 
     def get_message(self) -> (bytes, bytes, bytes):
-        print(self.raw.hex())
         sender_id, dest_id, msg = self.raw[1:].split(b"\x00")
         return sender_id, dest_id, msg
     
@@ -90,7 +89,6 @@ def encrypt_and_serialize(msg:Message, key:bytes) -> bytes:
     tmp = len(enc_data)
     size = bytes([tmp&0xff]) + bytes([(tmp>>8)&0xff]) + bytes([(tmp>>16)&0xff])
     packet = size + enc_data 
-    print(f"TAG: {tag.hex()}\nIV: {cipher.nonce.hex()}\nCipher: {ciphertext.hex()}")
     return packet
 
 def decrypt(msg:bytes, key:bytes) -> Message:
