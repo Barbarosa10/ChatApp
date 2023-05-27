@@ -200,6 +200,8 @@ namespace ChatApp
         public void deserialize(byte[] data)
         {
             int username_len = Array.IndexOf(data, 0);
+            Console.WriteLine("USERNAME: "  + Encoding.UTF8.GetString(data.Take(username_len).ToArray()));
+
             if (username_len == -1)
             {
                 Username = null;
@@ -251,6 +253,7 @@ namespace ChatApp
 
         public byte[] serialize()
         {
+            Console.WriteLine("CONTACT: " + Username);
             byte[] data = new byte[Username.Length + 1];
             data[0] = (byte)PacketType.RETRIEVE_CONTACT;
             Encoding.UTF8.GetBytes(Username).CopyTo(data, 1);
@@ -340,7 +343,7 @@ namespace ChatApp
             Message = Encoding.UTF8.GetString(data.Skip(sender_len + dest_len + 2).ToArray());
         }
 
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             Console.WriteLine("Mesaj primit: " + Message);
             //throw new NotImplementedException();
@@ -371,7 +374,7 @@ namespace ChatApp
             DestID_Or_Error = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             throw new NotImplementedException();
         }
@@ -391,7 +394,7 @@ namespace ChatApp
             throw new NotImplementedException();
         }
 
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
             throw new NotImplementedException();
         }
@@ -419,12 +422,34 @@ namespace ChatApp
         public void deserialize(byte[] data)
         {
             data = data.Skip(1).ToArray();
-            Messages = JsonConvert.DeserializeObject<List<ServerMessage>>(Encoding.UTF8.GetString(data))
+            Messages = JsonConvert.DeserializeObject<List<ServerMessage>>(Encoding.UTF8.GetString(data));
         }
 
-        public void execute(Chat chatForm)
+        public void execute(Chat chat)
         {
-            throw new NotImplementedException();
+            Conversation conversation = null;
+            foreach (ServerMessage message in Messages)
+            {
+                if (message.sender_id != chat.GetLoggedUser().Name)
+                {
+                    conversation = chat.GetConversation(message.sender_id);
+                    break;
+                }
+            }
+
+            foreach (ServerMessage message in Messages)
+            {
+                Console.WriteLine("SENDER: " + message.sender_id);
+
+                if(conversation != null)
+                    conversation.addMessage(message.timestamp, message.sender_id, message.content);
+            }
+            //ChatForm form = chat.getChatForm();
+            if (conversation != null)
+                chat.getChatForm().AddMessagesToListView(conversation.Contact.Name);
+
+
+
         }
 
         public byte[] serialize()

@@ -31,8 +31,11 @@ namespace ChatApp
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChatForm));
             this.ChatMainPanel = new System.Windows.Forms.Panel();
+            this.ConversationsSidePanel = new System.Windows.Forms.Panel();
+            this.ConversationsLabel = new System.Windows.Forms.Label();
+            this.AddConversationButton = new System.Windows.Forms.Button();
+            this.ConversationsListView = new System.Windows.Forms.ListView();
             this.ConversationPanel = new System.Windows.Forms.Panel();
-            this.ConversationWithMessagesPanel = new System.Windows.Forms.Panel();
             this.ConversationWithMessagesListView = new System.Windows.Forms.ListView();
             this.TopConversationPanel = new System.Windows.Forms.Panel();
             this.ConversationTopLabel = new System.Windows.Forms.Label();
@@ -60,10 +63,6 @@ namespace ChatApp
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.SettingsPanel = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.ConversationsSidePanel = new System.Windows.Forms.Panel();
-            this.ConversationsLabel = new System.Windows.Forms.Label();
-            this.AddConversationButton = new System.Windows.Forms.Button();
-            this.ConversationsListView = new System.Windows.Forms.ListView();
             this.AddConversationPanel = new System.Windows.Forms.Panel();
             this.InsertConversationButton = new System.Windows.Forms.Button();
             this.ConversationToAddTextBox = new System.Windows.Forms.TextBox();
@@ -83,8 +82,8 @@ namespace ChatApp
             this.ConversationButton = new System.Windows.Forms.Button();
             this.ProfileButton = new System.Windows.Forms.Button();
             this.ChatMainPanel.SuspendLayout();
+            this.ConversationsSidePanel.SuspendLayout();
             this.ConversationPanel.SuspendLayout();
-            this.ConversationWithMessagesPanel.SuspendLayout();
             this.TopConversationPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConversationTopAvatarPictureBox)).BeginInit();
             this.ConversationMainPanel.SuspendLayout();
@@ -100,7 +99,6 @@ namespace ChatApp
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SettingsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            this.ConversationsSidePanel.SuspendLayout();
             this.AddConversationPanel.SuspendLayout();
             this.ContactsSidePanel.SuspendLayout();
             this.SettingsSidePanel.SuspendLayout();
@@ -130,10 +128,63 @@ namespace ChatApp
             this.ChatMainPanel.Size = new System.Drawing.Size(989, 510);
             this.ChatMainPanel.TabIndex = 0;
             // 
+            // ConversationsSidePanel
+            // 
+            this.ConversationsSidePanel.BackColor = System.Drawing.Color.Black;
+            this.ConversationsSidePanel.Controls.Add(this.ConversationsLabel);
+            this.ConversationsSidePanel.Controls.Add(this.AddConversationButton);
+            this.ConversationsSidePanel.Controls.Add(this.ConversationsListView);
+            this.ConversationsSidePanel.Location = new System.Drawing.Point(109, 2);
+            this.ConversationsSidePanel.Name = "ConversationsSidePanel";
+            this.ConversationsSidePanel.Size = new System.Drawing.Size(153, 509);
+            this.ConversationsSidePanel.TabIndex = 6;
+            // 
+            // ConversationsLabel
+            // 
+            this.ConversationsLabel.BackColor = System.Drawing.Color.Transparent;
+            this.ConversationsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConversationsLabel.ForeColor = System.Drawing.Color.Gray;
+            this.ConversationsLabel.Location = new System.Drawing.Point(1, 0);
+            this.ConversationsLabel.Name = "ConversationsLabel";
+            this.ConversationsLabel.Size = new System.Drawing.Size(152, 31);
+            this.ConversationsLabel.TabIndex = 4;
+            this.ConversationsLabel.Text = "Conversations";
+            this.ConversationsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // AddConversationButton
+            // 
+            this.AddConversationButton.BackColor = System.Drawing.Color.Transparent;
+            this.AddConversationButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.AddConversationButton.FlatAppearance.BorderSize = 0;
+            this.AddConversationButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AddConversationButton.ForeColor = System.Drawing.Color.DimGray;
+            this.AddConversationButton.Image = ((System.Drawing.Image)(resources.GetObject("AddConversationButton.Image")));
+            this.AddConversationButton.Location = new System.Drawing.Point(0, 32);
+            this.AddConversationButton.Name = "AddConversationButton";
+            this.AddConversationButton.Size = new System.Drawing.Size(153, 58);
+            this.AddConversationButton.TabIndex = 3;
+            this.AddConversationButton.UseVisualStyleBackColor = false;
+            this.AddConversationButton.Click += new System.EventHandler(this.AddConversationButton_Click);
+            // 
+            // ConversationsListView
+            // 
+            this.ConversationsListView.BackColor = System.Drawing.Color.Gray;
+            this.ConversationsListView.CausesValidation = false;
+            this.ConversationsListView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.ConversationsListView.FullRowSelect = true;
+            this.ConversationsListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.ConversationsListView.HideSelection = false;
+            this.ConversationsListView.Location = new System.Drawing.Point(-1, 92);
+            this.ConversationsListView.Name = "ConversationsListView";
+            this.ConversationsListView.Size = new System.Drawing.Size(154, 416);
+            this.ConversationsListView.TabIndex = 1;
+            this.ConversationsListView.UseCompatibleStateImageBehavior = false;
+            this.ConversationsListView.SelectedIndexChanged += new System.EventHandler(this.ConversationsListView_SelectedIndexChanged);
+            // 
             // ConversationPanel
             // 
             this.ConversationPanel.BackColor = System.Drawing.Color.Black;
-            this.ConversationPanel.Controls.Add(this.ConversationWithMessagesPanel);
+            this.ConversationPanel.Controls.Add(this.ConversationWithMessagesListView);
             this.ConversationPanel.Controls.Add(this.TopConversationPanel);
             this.ConversationPanel.Controls.Add(this.MessageToBeSentBox);
             this.ConversationPanel.Controls.Add(this.sendButton);
@@ -142,24 +193,15 @@ namespace ChatApp
             this.ConversationPanel.Size = new System.Drawing.Size(722, 508);
             this.ConversationPanel.TabIndex = 2;
             // 
-            // ConversationWithMessagesPanel
-            // 
-            this.ConversationWithMessagesPanel.BackColor = System.Drawing.Color.Black;
-            this.ConversationWithMessagesPanel.Controls.Add(this.ConversationWithMessagesListView);
-            this.ConversationWithMessagesPanel.Location = new System.Drawing.Point(-2, 48);
-            this.ConversationWithMessagesPanel.Name = "ConversationWithMessagesPanel";
-            this.ConversationWithMessagesPanel.Size = new System.Drawing.Size(724, 423);
-            this.ConversationWithMessagesPanel.TabIndex = 3;
-            // 
             // ConversationWithMessagesListView
             // 
             this.ConversationWithMessagesListView.BackColor = System.Drawing.Color.Black;
             this.ConversationWithMessagesListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.ConversationWithMessagesListView.HideSelection = false;
-            this.ConversationWithMessagesListView.Location = new System.Drawing.Point(1, 0);
+            this.ConversationWithMessagesListView.Location = new System.Drawing.Point(0, 43);
             this.ConversationWithMessagesListView.Name = "ConversationWithMessagesListView";
             this.ConversationWithMessagesListView.Size = new System.Drawing.Size(724, 423);
-            this.ConversationWithMessagesListView.TabIndex = 0;
+            this.ConversationWithMessagesListView.TabIndex = 1;
             this.ConversationWithMessagesListView.UseCompatibleStateImageBehavior = false;
             // 
             // TopConversationPanel
@@ -181,9 +223,9 @@ namespace ChatApp
             this.ConversationTopLabel.Location = new System.Drawing.Point(59, 14);
             this.ConversationTopLabel.Name = "ConversationTopLabel";
             this.ConversationTopLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.ConversationTopLabel.Size = new System.Drawing.Size(112, 20);
+            this.ConversationTopLabel.Size = new System.Drawing.Size(118, 20);
             this.ConversationTopLabel.TabIndex = 3;
-            this.ConversationTopLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ConversationTopLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ConversationTopAvatarPictureBox
             // 
@@ -457,59 +499,6 @@ namespace ChatApp
             this.pictureBox3.TabIndex = 13;
             this.pictureBox3.TabStop = false;
             // 
-            // ConversationsSidePanel
-            // 
-            this.ConversationsSidePanel.BackColor = System.Drawing.Color.Black;
-            this.ConversationsSidePanel.Controls.Add(this.ConversationsLabel);
-            this.ConversationsSidePanel.Controls.Add(this.AddConversationButton);
-            this.ConversationsSidePanel.Controls.Add(this.ConversationsListView);
-            this.ConversationsSidePanel.Location = new System.Drawing.Point(109, 2);
-            this.ConversationsSidePanel.Name = "ConversationsSidePanel";
-            this.ConversationsSidePanel.Size = new System.Drawing.Size(153, 509);
-            this.ConversationsSidePanel.TabIndex = 6;
-            // 
-            // ConversationsLabel
-            // 
-            this.ConversationsLabel.BackColor = System.Drawing.Color.Transparent;
-            this.ConversationsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConversationsLabel.ForeColor = System.Drawing.Color.Gray;
-            this.ConversationsLabel.Location = new System.Drawing.Point(1, 0);
-            this.ConversationsLabel.Name = "ConversationsLabel";
-            this.ConversationsLabel.Size = new System.Drawing.Size(152, 31);
-            this.ConversationsLabel.TabIndex = 4;
-            this.ConversationsLabel.Text = "Conversations";
-            this.ConversationsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // AddConversationButton
-            // 
-            this.AddConversationButton.BackColor = System.Drawing.Color.Transparent;
-            this.AddConversationButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.AddConversationButton.FlatAppearance.BorderSize = 0;
-            this.AddConversationButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AddConversationButton.ForeColor = System.Drawing.Color.DimGray;
-            this.AddConversationButton.Image = ((System.Drawing.Image)(resources.GetObject("AddConversationButton.Image")));
-            this.AddConversationButton.Location = new System.Drawing.Point(0, 32);
-            this.AddConversationButton.Name = "AddConversationButton";
-            this.AddConversationButton.Size = new System.Drawing.Size(153, 58);
-            this.AddConversationButton.TabIndex = 3;
-            this.AddConversationButton.UseVisualStyleBackColor = false;
-            this.AddConversationButton.Click += new System.EventHandler(this.AddConversationButton_Click);
-            // 
-            // ConversationsListView
-            // 
-            this.ConversationsListView.BackColor = System.Drawing.Color.Gray;
-            this.ConversationsListView.CausesValidation = false;
-            this.ConversationsListView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.ConversationsListView.FullRowSelect = true;
-            this.ConversationsListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.ConversationsListView.HideSelection = false;
-            this.ConversationsListView.Location = new System.Drawing.Point(-1, 92);
-            this.ConversationsListView.Name = "ConversationsListView";
-            this.ConversationsListView.Size = new System.Drawing.Size(154, 416);
-            this.ConversationsListView.TabIndex = 1;
-            this.ConversationsListView.UseCompatibleStateImageBehavior = false;
-            this.ConversationsListView.SelectedIndexChanged += new System.EventHandler(this.ConversationsListView_SelectedIndexChanged);
-            // 
             // AddConversationPanel
             // 
             this.AddConversationPanel.BackColor = System.Drawing.Color.Black;
@@ -757,9 +746,9 @@ namespace ChatApp
             this.Name = "ChatForm";
             this.Text = "ChatForm";
             this.ChatMainPanel.ResumeLayout(false);
+            this.ConversationsSidePanel.ResumeLayout(false);
             this.ConversationPanel.ResumeLayout(false);
             this.ConversationPanel.PerformLayout();
-            this.ConversationWithMessagesPanel.ResumeLayout(false);
             this.TopConversationPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ConversationTopAvatarPictureBox)).EndInit();
             this.ConversationMainPanel.ResumeLayout(false);
@@ -777,7 +766,6 @@ namespace ChatApp
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.SettingsPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            this.ConversationsSidePanel.ResumeLayout(false);
             this.AddConversationPanel.ResumeLayout(false);
             this.AddConversationPanel.PerformLayout();
             this.ContactsSidePanel.ResumeLayout(false);
@@ -834,7 +822,6 @@ namespace ChatApp
         private System.Windows.Forms.Button InsertConversationButton;
         private System.Windows.Forms.TextBox ConversationToAddTextBox;
         private System.Windows.Forms.Label ConversationToAddLabel;
-        private System.Windows.Forms.Panel ConversationWithMessagesPanel;
         private System.Windows.Forms.Panel TopConversationPanel;
         private System.Windows.Forms.Label ConversationTopLabel;
         private System.Windows.Forms.PictureBox ConversationTopAvatarPictureBox;

@@ -15,7 +15,12 @@ namespace ChatApp
         private List<Contact> _contacts = new List<Contact>();
         private LocalDatabase _localDatabase;
         private ChatForm _chatForm;
+        private Contact _loggedUser;
 
+        public ChatForm getChatForm()
+        {
+            return _chatForm;
+        }
         public ChatForm ChatForm { get; set; }
         public LocalDatabase LocalDatabase { get; set; }
 
@@ -28,11 +33,15 @@ namespace ChatApp
             }
             return null;
         }
-
-        public Chat(LocalDatabase localDatabase, ChatForm chatForm)
+        public Chat(LocalDatabase localDatabase, ChatForm chatForm, Contact loggedUser)
         {
-            _chatForm = chatForm;
-            _localDatabase = localDatabase;
+            this._chatForm = chatForm;
+            this._localDatabase = localDatabase;
+            this._loggedUser = loggedUser;
+        }
+        public Contact GetLoggedUser()
+        {
+            return this._loggedUser;
         }
         public List<Conversation> Conversations
         {
