@@ -105,20 +105,29 @@ namespace ChatApp
             ConversationWithMessagesListView.Clear();
 
             conversationUsername = contact.Name;
-            GetNMessagesPacket packet = new GetNMessagesPacket();
-            packet.User1 = logged_user.Name;
-            packet.User2 = conversationUsername;
-
-            ClientSocket.Instance.SendMessage(packet);
+            Conversation conversation = chat.GetConversation(conversationUsername);
 
 
+            if(conversation.State == 0)
+            {
+                GetNMessagesPacket packet = new GetNMessagesPacket();
+                packet.User1 = logged_user.Name;
+                packet.User2 = conversationUsername;
+
+                ClientSocket.Instance.SendMessage(packet);
+            }
+            else
+            {
+                conversation.State = 1;
+            }
+            
             if (conversationTimer != null)
             {
                 conversationTimer.Stop();
                 conversationTimer = null;
             }
             conversationTimer = new System.Windows.Forms.Timer();
-            conversationTimer.Interval = 5000; // Interval de 2 secunde
+            conversationTimer.Interval = 2000; // Interval de 2 secunde
             conversationTimer.Tick += TimerTick;
 
             // Pornirea Timer-ului
@@ -588,7 +597,14 @@ namespace ChatApp
 
             //ClientSocket.Instance.SendMessage(packet);
 
-            AddMessagesToListView(conversationUsername);
+            Conversation conversation = chat.GetConversation(conversationUsername);
+
+            if(conversation.Size != conversation.getMessage().Count)
+            {
+                AddMessagesToListView(conversationUsername);
+                conversation.Size = conversation.getMessage().Count;
+            }
+
         }
 
         private String getCurrentTimestamp()
