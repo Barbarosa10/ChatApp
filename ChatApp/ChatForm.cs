@@ -266,7 +266,7 @@ namespace ChatApp
             //ClientSocket.Instance.SendMessage(rsa.ExportPublicKey());
             SendMessagePacket packet = new SendMessagePacket
             {
-                DestID = ConversationTopLabel.Text,
+                DestID = conversationUsername,
                 SenderID = logged_user.Name,
                 Message = MessageToBeSentBox.Text
             };
@@ -579,11 +579,11 @@ namespace ChatApp
 
         private void TimerTick(object sender, EventArgs e)
         {
-            GetNMessagesPacket packet = new GetNMessagesPacket();
-            packet.User1 = logged_user.Name;
-            packet.User2 = conversationUsername;
+            //GetNMessagesPacket packet = new GetNMessagesPacket();
+            //packet.User1 = logged_user.Name;
+            //packet.User2 = conversationUsername;
 
-            ClientSocket.Instance.SendMessage(packet);
+            //ClientSocket.Instance.SendMessage(packet);
 
             AddMessagesToListView(conversationUsername);
         }

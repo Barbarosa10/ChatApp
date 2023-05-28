@@ -110,9 +110,9 @@ namespace ChatApp
             // ChatMainPanel
             // 
             this.ChatMainPanel.BackColor = System.Drawing.Color.Black;
-            this.ChatMainPanel.Controls.Add(this.ConversationsSidePanel);
             this.ChatMainPanel.Controls.Add(this.ConversationPanel);
             this.ChatMainPanel.Controls.Add(this.ConversationMainPanel);
+            this.ChatMainPanel.Controls.Add(this.ConversationsSidePanel);
             this.ChatMainPanel.Controls.Add(this.AddContactsPanel);
             this.ChatMainPanel.Controls.Add(this.ContactsPanel);
             this.ChatMainPanel.Controls.Add(this.ContactPanel);
