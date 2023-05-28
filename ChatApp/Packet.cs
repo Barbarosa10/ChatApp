@@ -34,7 +34,7 @@ namespace ChatApp
         void execute(Chat chat);
     }
 
-    class LoginPacket: IPacket
+    class LoginPacket : IPacket
     {
         public string Username { get; set; }
         public string Password { get; set; }
@@ -49,11 +49,11 @@ namespace ChatApp
         public void deserialize(byte[] data)
         {
             int username_len = Array.IndexOf(data, (byte)0);
-            byte[] username = new byte[username_len-1];
-            Array.Copy(data, 1, username,0, username_len);
+            byte[] username = new byte[username_len - 1];
+            Array.Copy(data, 1, username, 0, username_len);
 
             byte[] password = new byte[data.Length - username_len + 1];
-            Array.Copy(data, 1+username_len, password, 0, data.Length - username_len + 1);
+            Array.Copy(data, 1 + username_len, password, 0, data.Length - username_len + 1);
 
             Username = Encoding.UTF8.GetString(username);
             Password = Encoding.UTF8.GetString(password);
@@ -180,7 +180,7 @@ namespace ChatApp
 
     class RetrieveContactAckPacket : IPacket
     {
-        
+
         /// <summary>
         /// The username for the picture if it exists, null if it doesn't
         /// </summary>
@@ -208,7 +208,7 @@ namespace ChatApp
             else
             {
                 data = data.Skip(1).ToArray();
-                Username = Encoding.UTF8.GetString(data.Take(username_len-1).ToArray());
+                Username = Encoding.UTF8.GetString(data.Take(username_len - 1).ToArray());
                 Picture = new byte[data.Length - username_len];
                 Array.Copy(data, username_len, Picture, 0, data.Length - username_len);
             }
@@ -258,7 +258,7 @@ namespace ChatApp
         }
         public void execute(Chat chat)
         {
-            
+
             return;
             //throw new NotImplementedException();
         }
@@ -336,8 +336,8 @@ namespace ChatApp
             data = data.Skip(1).ToArray();
             int sender_len = Array.IndexOf(data, (byte)0);
             SenderID = Encoding.UTF8.GetString(data.Take(sender_len).ToArray());
-            int dest_len = Array.IndexOf(data, (byte)0, sender_len+1) - sender_len;
-            DestID_or_Timestamp = Encoding.UTF8.GetString(data.Skip(sender_len+1).Take(dest_len-1).ToArray());
+            int dest_len = Array.IndexOf(data, (byte)0, sender_len + 1) - sender_len;
+            DestID_or_Timestamp = Encoding.UTF8.GetString(data.Skip(sender_len + 1).Take(dest_len - 1).ToArray());
             Message = Encoding.UTF8.GetString(data.Skip(sender_len + dest_len + 1).ToArray());
         }
 
@@ -352,7 +352,7 @@ namespace ChatApp
             else
             {
                 Contact sender = chat.Contact(SenderID);
-                if(sender == null)
+                if (sender == null)
                 {
                     ClientSocket.Instance.SendMessage(new RetrieveContactPacket(SenderID));
                 }
@@ -377,9 +377,8 @@ namespace ChatApp
 
     class SendMessageAckPacket : IPacket
     {
-
         /// <summary>
-        /// Daca a fost primit corect, returneaza ID-ul destinatiei. Daca nu, un mesaj de eroare
+        /// DestID if returned correctly, Error if not
         /// </summary>
         public string DestID_Or_Error { get; set; }
         public void deserialize(byte[] data)
@@ -390,15 +389,6 @@ namespace ChatApp
         public void execute(Chat chat)
         {
 
-            //Conversation conversation = null;
-            //conversation = chat.GetConversation(DestID_Or_Error);
-
-            //if(conversation != null)
-            //{
-            //    conversation.addMessage(message.timestamp, message.sender_id, message.content);
-            //}
-
-            //throw new NotImplementedException();
         }
 
         public byte[] serialize()
@@ -450,34 +440,14 @@ namespace ChatApp
         public void execute(Chat chat)
         {
             Conversation conversation = chat.GetConversation(ChatForm.conversationUsername);
-            //foreach (ServerMessage message in Messages)
-            //{
-            //    if (message.sender_id != chat.GetLoggedUser().Name)
-            //    {
-            //        conversation = chat.GetConversation(message.sender_id);
-            //        break;
-            //    }
-            //}
-
             Console.WriteLine("NR MESSAGES: " + Messages.Count);
-            //Console.WriteLine("Nr mesaje: " + Messages.Count);
             foreach (ServerMessage message in Messages)
             {
-                if(message.sender_id == "edmund")
-                {
-                    Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                }
                 Console.WriteLine("SENDER: " + message.sender_id);
 
-                if(conversation != null)
+                if (conversation != null)
                     conversation.addMessage(message.timestamp, message.sender_id, message.content);
             }
-            //ChatForm form = chat.getChatForm();
-            //if (conversation != null)
-            //    chat.getChatForm().AddMessagesToListView(conversation.Contact.Name);
-
-
-
         }
 
         public byte[] serialize()
@@ -486,58 +456,5 @@ namespace ChatApp
         }
     }
 
-
-    static class Packet
-    {
-        static byte _type;
-        static byte[] _payload;
-        
-        static byte[] serialize()
-        {
-            byte[] packet = new byte[1 + _payload.Length];
-            packet[0] = _type;
-            _payload.CopyTo(packet, 1);
-            return packet;
-
-        }
-        static public byte[] getLoginPacket(string user, string password)
-        {
-            _type = (byte)PacketType.LOGIN;
-            _payload = new byte[1 + user.Length + password.Length];
-            Encoding.UTF8.GetBytes(user).CopyTo(_payload, 0);
-            _payload[user.Length] = 0;
-            Encoding.UTF8.GetBytes(password).CopyTo(_payload, user.Length + 1);
-            return serialize();
-        }
-
-        static public byte[] getRegisterPacket(string user, string password)
-        {
-            _type = (byte)PacketType.REGISTER;
-            _payload = new byte[1 + user.Length + password.Length];
-            Encoding.UTF8.GetBytes(user).CopyTo(_payload, 0);
-            _payload[user.Length] = 0;
-            Encoding.UTF8.GetBytes(password).CopyTo(_payload, user.Length + 1);
-            return serialize();
-        }
-
-        static public byte[] getSendMessagePacket(string source, string dest, string mes)
-        {
-            _type = (byte)PacketType.SEND_MESSAGE;
-            _payload = new byte[2 + source.Length + dest.Length + mes.Length];
-            Encoding.UTF8.GetBytes(source).CopyTo(_payload, 0);
-            _payload[source.Length] = 0;
-            Encoding.UTF8.GetBytes(dest).CopyTo(_payload, source.Length + 1);
-            _payload[source.Length + dest.Length + 1] = 0;
-            Encoding.UTF8.GetBytes(mes).CopyTo(_payload, source.Length + dest.Length + 1 + 1);
-            return serialize();
-        }
-
-        static public byte[] getErrorMessagePacket(string error)
-        {
-            _type = (byte)PacketType.ERROR;
-            _payload = new byte[error.Length];
-            Encoding.UTF8.GetBytes(error).CopyTo(_payload, 0);
-            return serialize();
-        }
-    }
 }
+   
