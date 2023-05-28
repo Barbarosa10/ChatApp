@@ -56,7 +56,11 @@ namespace ChatApp
         public byte[] Recv(int size = 1024)
         {
             byte[] encryptedMessage = new byte[size];
-            s.Receive(encryptedMessage);
+            int recv_len = s.Receive(encryptedMessage, size, SocketFlags.None);
+            while(recv_len < size)
+            {
+                recv_len += s.Receive(encryptedMessage,recv_len ,size-recv_len, SocketFlags.None);
+            }
 
             byte[] nonce = new byte[nonceLength];
             Array.Copy(encryptedMessage, 0, nonce, 0, nonceLength);

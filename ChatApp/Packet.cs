@@ -352,7 +352,7 @@ namespace ChatApp
             data[0] = (byte)PacketType.SEND_MESSAGE;
             Encoding.UTF8.GetBytes(SenderID).CopyTo(data, 1);
             data[SenderID.Length + 1] = 0;
-            Array.Copy(Encoding.UTF8.GetBytes(SenderID), 0, data, SenderID.Length + 2, SenderID.Length);
+            Array.Copy(Encoding.UTF8.GetBytes(DestID), 0, data, SenderID.Length + 2, SenderID.Length);
             data[SenderID.Length + DestID.Length + 2] = 0;
             Array.Copy(Encoding.UTF8.GetBytes(Message), 0, data, SenderID.Length + DestID.Length + 3, Message.Length);
             return data;
