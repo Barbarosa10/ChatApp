@@ -115,7 +115,7 @@ namespace ChatApp
                 conversationTimer = null;
             }
             conversationTimer = new System.Windows.Forms.Timer();
-            conversationTimer.Interval = 7000; // Interval de 2 secunde
+            conversationTimer.Interval = 5000; // Interval de 2 secunde
             conversationTimer.Tick += TimerTick;
 
             // Pornirea Timer-ului
@@ -270,7 +270,13 @@ namespace ChatApp
                 SenderID = logged_user.Name,
                 Message = MessageToBeSentBox.Text
             };
+
+            Conversation conversation = chat.GetConversation(conversationUsername);
+
+            conversation.addMessage(getCurrentTimestamp(), packet.SenderID, packet.Message);
             Console.WriteLine("Sendind message to " + packet.DestID + " : " + packet.Message);
+            AddMessagesToListView(conversationUsername);
+
             ClientSocket.Instance.SendMessage(packet);
 
         }
@@ -544,7 +550,10 @@ namespace ChatApp
                         image.Images.Add(conversation.Contact.Image);
 
                     // Convertiți timestamp-ul într-un obiect DateTime
-                    DateTime dateTime = new DateTime(1970, 1, 1).AddSeconds(Convert.ToDouble(timestamp)); // Sau AddMilliseconds() pentru milisecunde
+                    DateTime timestampUtc = new DateTime(1970, 1, 1).AddSeconds(Convert.ToDouble(timestamp)); // Sau AddMilliseconds() pentru milisecunde
+
+                    TimeZoneInfo localTimeZone = TimeZoneInfo.Local;
+                    DateTime dateTime = TimeZoneInfo.ConvertTimeFromUtc(timestampUtc, localTimeZone);
 
                     // Formatați data și ora într-un șir de caractere utilizând metoda ToString()
                     string dateString = dateTime.ToString("dd-MM-yyyy HH:mm"); // Schimbați formatul după necesități
@@ -579,6 +588,15 @@ namespace ChatApp
             AddMessagesToListView(conversationUsername);
         }
 
+        private String getCurrentTimestamp()
+        {
+            DateTime currentTime = DateTime.UtcNow;
+            long timestamp = new DateTimeOffset(currentTime).ToUnixTimeSeconds();
+
+            return timestamp.ToString();
+
+
+        }
 
         private void ConversationsListView_SelectedIndexChanged(object sender, EventArgs e)
         {
