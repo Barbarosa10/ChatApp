@@ -102,13 +102,16 @@ namespace ChatApp
                 ConversationTopLabel.Text = contact.Name;
             }
 
+            ConversationWithMessagesListView.Clear();
+
+            conversationUsername = contact.Name;
             GetNMessagesPacket packet = new GetNMessagesPacket();
             packet.User1 = logged_user.Name;
-            packet.User2 = contact.Name;
+            packet.User2 = conversationUsername;
 
             ClientSocket.Instance.SendMessage(packet);
 
-            conversationUsername = contact.Name;
+
             if (conversationTimer != null)
             {
                 conversationTimer.Stop();
