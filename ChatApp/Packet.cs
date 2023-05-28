@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace ChatApp
 {
@@ -356,6 +357,11 @@ namespace ChatApp
                 {
                     ClientSocket.Instance.SendMessage(new RetrieveContactPacket(SenderID));
                 }
+                if (chat.Contact(SenderID) == null)
+                {
+                    chat.AddContact(SenderID);
+                }
+
                 chat.AddConversation(SenderID);
             }
 
