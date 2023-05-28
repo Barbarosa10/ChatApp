@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("UnitTests")]
 namespace ChatApp
 {
     /// <summary>

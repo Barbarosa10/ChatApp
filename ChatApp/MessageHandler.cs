@@ -45,7 +45,7 @@ namespace ChatApp
                     {
                         IPacket packet = ClientSocket.Instance.ReceiveMessage();
 
-                        packet.execute(chat);
+                        packet.Execute(chat);
                     }
                     catch (Exception e)
                     {

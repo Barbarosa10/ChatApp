@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using Communications;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("UnitTests")]
 namespace ChatApp
 {
     /// <summary>
@@ -108,7 +110,7 @@ namespace ChatApp
         /// <param name="message">The message to send.</param>
         public void SendMessage(IPacket message)
         {
-            _encProxy.Send(message.serialize());
+            _encProxy.Send(message.Serialize());
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace ChatApp
                 default:
                     throw new Exception("Unknown packet type received.");
             }
-            packet.deserialize(data);
+            packet.Deserialize(data);
             return packet;
         }
     }

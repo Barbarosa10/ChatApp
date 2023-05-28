@@ -203,9 +203,9 @@ def main():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((SERVER_IP, SERVER_PORT))
-    server.listen(5)
+    server.listen(20)
 
-    thread_pool = ThreadPool(processes=4)
+    thread_pool = ThreadPool(processes=5)
 
     while True:
         try:

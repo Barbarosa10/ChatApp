@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Communications
 {
-    interface IComms
+    public interface IComms
     {
         /// <summary>
         /// Sends a message.

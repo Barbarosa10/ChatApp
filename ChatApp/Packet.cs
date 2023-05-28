@@ -9,7 +9,9 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("UnitTests")]
 namespace ChatApp
 {
     enum PacketType
@@ -32,9 +34,9 @@ namespace ChatApp
     // Folosim sablonul de proiectare Command
     interface IPacket
     {
-        byte[] serialize();
-        void deserialize(byte[] data);
-        void execute(Chat chat);
+        byte[] Serialize();
+        void Deserialize(byte[] data);
+        void Execute(Chat chat);
     }
 
     class LoginPacket : IPacket
@@ -49,7 +51,7 @@ namespace ChatApp
 
         public LoginPacket() { }
 
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             int username_len = Array.IndexOf(data, (byte)0);
             byte[] username = new byte[username_len - 1];
@@ -62,7 +64,7 @@ namespace ChatApp
             Password = Encoding.UTF8.GetString(password);
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             byte[] packet = new byte[Username.Length + Password.Length + 2];
             packet[0] = (byte)PacketType.LOGIN;
@@ -72,7 +74,7 @@ namespace ChatApp
             return packet;
         }
 
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -89,19 +91,19 @@ namespace ChatApp
 
         public LoginAckPacket() { }
 
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             byte[] data = new byte[Message.Length + 1];
             data[0] = (byte)PacketType.LOGIN_ACK;
             Encoding.UTF8.GetBytes(Message).CopyTo(data, 1);
             return data;
         }
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -121,7 +123,7 @@ namespace ChatApp
 
         public RegisterPacket() { }
 
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
 
             int username_len = Array.IndexOf(data, (byte)0);
@@ -135,7 +137,7 @@ namespace ChatApp
             Password = Encoding.UTF8.GetString(password);
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             byte[] packet = new byte[Username.Length + Password.Length + 2];
             packet[0] = (byte)PacketType.REGISTER;
@@ -145,7 +147,7 @@ namespace ChatApp
             return packet;
         }
 
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -162,19 +164,19 @@ namespace ChatApp
 
         public RegisterAckPacket() { }
 
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             byte[] data = new byte[Message.Length + 1];
             data[0] = (byte)PacketType.REGISTER_ACK;
             Encoding.UTF8.GetBytes(Message).CopyTo(data, 1);
             return data;
         }
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -200,7 +202,7 @@ namespace ChatApp
 
         public RetrieveContactAckPacket() { }
 
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             int username_len = Array.IndexOf(data, (byte)0);
             if (username_len == -1)
@@ -217,11 +219,11 @@ namespace ChatApp
             }
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             throw new Exception("Nu ai nevoie de asta");
         }
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             MemoryStream ms = new MemoryStream(Picture);
             Image bitmap = Image.FromStream(ms);
@@ -246,12 +248,12 @@ namespace ChatApp
 
         public RetrieveContactPacket() { }
 
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             Username = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             Console.WriteLine("CONTACT: " + Username);
             byte[] data = new byte[Username.Length + 1];
@@ -259,7 +261,7 @@ namespace ChatApp
             Encoding.UTF8.GetBytes(Username).CopyTo(data, 1);
             return data;
         }
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
 
             return;
@@ -279,7 +281,7 @@ namespace ChatApp
 
         public UploadPhotoPacket() { }
 
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             data = data.Skip(1).ToArray();
             int username_len = Array.IndexOf(data, (byte)0);
@@ -288,7 +290,7 @@ namespace ChatApp
             Array.Copy(data, username_len + 1, Picture, 0, data.Length - username_len - 1);
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             byte[] data = new byte[Username.Length + 2 + Picture.Length];
             data[0] = (byte)PacketType.UPLOAD_PHOTO;
@@ -296,7 +298,7 @@ namespace ChatApp
             Array.Copy(Picture, 0, data, 1 + 1 + Username.Length, Picture.Length);
             return data;
         }
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -313,16 +315,16 @@ namespace ChatApp
 
         public UploadPhotoAckPacket() { }
 
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             Message = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             throw new Exception("Nu ai nevoie");
         }
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             return;
             //throw new NotImplementedException();
@@ -334,7 +336,7 @@ namespace ChatApp
         public string SenderID { get; set; }
         public string DestID_or_Timestamp { get; set; }
         public string Message { get; set; }
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             data = data.Skip(1).ToArray();
             int sender_len = Array.IndexOf(data, (byte)0);
@@ -344,7 +346,7 @@ namespace ChatApp
             Message = Encoding.UTF8.GetString(data.Skip(sender_len + dest_len + 1).ToArray());
         }
 
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             Console.WriteLine("Mesaj primit: " + Message);
 
@@ -368,7 +370,7 @@ namespace ChatApp
             //throw new NotImplementedException();
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             byte[] data = new byte[1 + 2 + SenderID.Length + DestID_or_Timestamp.Length + Message.Length];
             data[0] = (byte)PacketType.SEND_MESSAGE;
@@ -387,17 +389,17 @@ namespace ChatApp
         /// DestID if returned correctly, Error if not
         /// </summary>
         public string DestID_Or_Error { get; set; }
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             DestID_Or_Error = Encoding.UTF8.GetString(data.Skip(1).ToArray());
         }
 
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
 
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             throw new Exception("Nu ai nevoie");
         }
@@ -407,17 +409,17 @@ namespace ChatApp
     {
         public string User1 { get; set; }
         public string User2 { get; set; }
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             throw new NotImplementedException();
         }
 
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             throw new NotImplementedException();
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             byte[] data = new byte[User1.Length + User2.Length + 2];
             data[0] = (byte)PacketType.GET_CONVERSATION;
@@ -437,13 +439,13 @@ namespace ChatApp
             public string content { get; set; }
             public string timestamp { get; set; }
         }
-        public void deserialize(byte[] data)
+        public void Deserialize(byte[] data)
         {
             data = data.Skip(1).ToArray();
             Messages = JsonConvert.DeserializeObject<List<ServerMessage>>(Encoding.UTF8.GetString(data));
         }
 
-        public void execute(Chat chat)
+        public void Execute(Chat chat)
         {
             Conversation conversation = chat.GetConversation(ChatForm.conversationUsername);
             Console.WriteLine("NR MESSAGES: " + Messages.Count);
@@ -456,7 +458,7 @@ namespace ChatApp
             }
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             throw new NotImplementedException();
         }
