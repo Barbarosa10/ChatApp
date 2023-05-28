@@ -164,6 +164,7 @@ def client_handler(conn):
                         to_send.set_ack_msg(dest_id)
                 
                 else:
+                    add_message(sender_id, dest_id, mess)
                     to_send.set_error_msg("Server error")
                     logging.info(f"Cannot send message to unlogged user {dest_id}")
 
