@@ -29,9 +29,10 @@ namespace ChatApp
                 // Receive and process incoming messages
                 await Task.Run(() =>
                 {
-                    IPacket packet = ClientSocket.Instance.ReceiveMessage();
                     try
                     {
+                        IPacket packet = ClientSocket.Instance.ReceiveMessage();
+
                         packet.execute(chat);
                     }
                     catch(Exception e)
