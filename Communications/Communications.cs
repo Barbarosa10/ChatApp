@@ -1,20 +1,16 @@
-﻿using System;
+﻿using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Engines;
-using Org.BouncyCastle.Crypto.Modes;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
 
-namespace ChatApp
+namespace Communications
 {
-    /// <summary>
-    /// Represents a communication interface for sending and receiving messages.
-    /// </summary>
     interface IComms
     {
         /// <summary>
@@ -34,7 +30,7 @@ namespace ChatApp
     /// <summary>
     /// Represents a clear communication channel for sending and receiving messages without encryption.
     /// </summary>
-    class ClearComms : IComms
+    public class ClearComms : IComms
     {
         private Socket s;
 
@@ -63,7 +59,7 @@ namespace ChatApp
     /// <summary>
     /// Represents an encrypted communication channel for sending and receiving messages with encryption.
     /// </summary>
-    class EncComms : IComms
+    public class EncComms : IComms
     {
         private Socket s;
         private byte[] key;

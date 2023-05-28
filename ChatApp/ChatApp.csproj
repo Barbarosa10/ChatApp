@@ -53,6 +53,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chat.cs" />
@@ -64,7 +65,6 @@
     </Compile>
     <Compile Include="Contact.cs" />
     <Compile Include="Conversation.cs" />
-    <Compile Include="IComms.cs" />
     <Compile Include="LocalDatabase.cs" />
     <Compile Include="MessageHandler.cs" />
     <Compile Include="Packet.cs" />
@@ -115,6 +115,12 @@
     <Content Include="Resources\Contacts\ProfileImages\edmund.jpeg" />
     <Content Include="Resources\Contacts\ProfileImages\noimage.jpeg" />
     <Content Include="Resources\Contacts\Usernames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Communications\Communications.csproj">
+      <Project>{6eefddcd-87a2-444f-89c0-7e1bc600115d}</Project>
+      <Name>Communications</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
