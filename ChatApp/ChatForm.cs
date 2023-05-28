@@ -266,7 +266,7 @@ namespace ChatApp
             //ClientSocket.Instance.SendMessage(rsa.ExportPublicKey());
             SendMessagePacket packet = new SendMessagePacket
             {
-                DestID = ConversationTopLabel.Text,
+                DestID = conversationUsername,
                 SenderID = logged_user.Name,
                 Message = MessageToBeSentBox.Text
             };
