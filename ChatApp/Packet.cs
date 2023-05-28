@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace ChatApp
 {
@@ -226,7 +228,8 @@ namespace ChatApp
             Bitmap image = (Bitmap)bitmap;
             chat.LocalDatabase.UploadAvatarPhoto(image, Username);
 
-            chat.AddContact(Username);
+
+           chat.AddContact(Username);
 
 
             Console.WriteLine("Primit pachet cu poza");
