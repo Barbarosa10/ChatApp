@@ -226,7 +226,7 @@ namespace ChatApp
             Bitmap image = (Bitmap)bitmap;
             chat.LocalDatabase.UploadAvatarPhoto(image, Username);
 
-            chat.AddContact(Username);
+            //chat.AddContact(Username);
 
 
             Console.WriteLine("Primit pachet cu poza");
@@ -356,12 +356,10 @@ namespace ChatApp
                 if(sender == null)
                 {
                     ClientSocket.Instance.SendMessage(new RetrieveContactPacket(SenderID));
-                }
-                if (chat.Contact(SenderID) == null)
-                {
-                    chat.AddContact(SenderID);
-                }
 
+                }
+                Thread.Sleep(5000);
+                chat.AddContact(SenderID);
                 chat.AddConversation(SenderID);
             }
 
