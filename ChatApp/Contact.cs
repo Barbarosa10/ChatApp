@@ -62,6 +62,35 @@ namespace ChatApp
             }
         }
 
+        public void setImage()
+        {
+
+            String path = "./../../Resources/Contacts/ProfileImages/" + _name + ".jpeg";
+            try
+            {
+                bool check = false;
+
+                Console.WriteLine(path + "   \\" + _name + ".jpeg");
+
+                var bytes = File.ReadAllBytes(path);
+                MemoryStream ms = new MemoryStream(bytes);
+                Image bitmap = System.Drawing.Image.FromStream(ms);
+
+                _image = (Bitmap)bitmap;
+
+            }
+            catch (Exception exc)
+            {
+
+                var bytes = File.ReadAllBytes("./../../Resources/Contacts/ProfileImages/noimage.jpeg");
+                MemoryStream ms = new MemoryStream(bytes);
+                Image bitmap = System.Drawing.Image.FromStream(ms);
+
+                _image = (Bitmap)bitmap;
+
+            }
+        }
+
         /// <summary>
         /// Gets or sets the name of the contact.
         /// </summary>

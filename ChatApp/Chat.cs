@@ -69,6 +69,7 @@ namespace ChatApp
             this._chatForm = chatForm;
             this._localDatabase = localDatabase;
             this._loggedUser = loggedUser;
+
         }
 
         /// <summary>

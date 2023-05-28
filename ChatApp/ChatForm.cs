@@ -16,18 +16,21 @@ namespace ChatApp
     {
         static System.Windows.Forms.Timer conversationTimer;
         public static String conversationUsername;
-
+        public static int localDatabaseReloaded;
         List<Panel> listPanelMid = new List<Panel>();
         List<Panel> listPanelRight = new List<Panel>();
         Chat chat;
         Contact logged_user;
         MessageHandler handler = new MessageHandler();
         LocalDatabase _localDatabase;
+       
         public ChatForm(Contact user, LocalDatabase localDatabase)
         {
-
+            
             InitializeComponent();
             this.CenterToScreen();
+
+            localDatabaseReloaded = 0;
             _localDatabase = localDatabase;
             logged_user = user;
             chat = new Chat(_localDatabase, this, logged_user);
@@ -37,17 +40,20 @@ namespace ChatApp
             //    handler.Start(chat);
             //}));
             handler.Start(chat);
+            _localDatabase.ReloadLocalDatabase(logged_user);
 
+            while(localDatabaseReloaded == 0) { }
+
+            logged_user.setImage();
+            AvatarPictureBoxProfile.Image = logged_user.Image;
+            AvatarPictureBoxSettings.Image = logged_user.Image;
 
             UserLabel.Text = user.Name;
+
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
-
-
-            AvatarPictureBoxProfile.Image = logged_user.Image;
-            AvatarPictureBoxSettings.Image = logged_user.Image;
 
             listPanelRight.Add(ProfilePanel);
             listPanelRight.Add(ContactsPanel);
