@@ -16,7 +16,7 @@ namespace ChatApp
     /// </summary>
     class ClientSocket
     {
-        private string IPAddress = "146.190.44.233"; // IP address to connect to
+        private string IPAddress = "127.0.0.1"; // IP address to connect to 146.190.44.233
         private static ClientSocket instance = null;
         private Socket sender;
         private ClearComms _clearProxy;

@@ -145,6 +145,38 @@ namespace ChatApp
 
             File.WriteAllText("./../../Resources/Contacts/Usernames.txt", content);
         }
+
+        public void ReloadLocalDatabase(Contact loggedUser)
+        {
+
+            String content = File.ReadAllText("./../../Resources/Contacts/LoggedUser.txt");
+
+            if (!loggedUser.Name.Equals(content))
+            {
+                File.WriteAllText("./../../Resources/Contacts/LoggedUser.txt", loggedUser.Name);
+                File.WriteAllText("./../../Resources/Contacts/Usernames.txt", "");
+                File.WriteAllText("./../../Resources/Contacts/Conversations.txt", "");
+                
+                String path = "./../../Resources/Contacts/ProfileImages/";
+                string[] files = Directory.GetFiles(path);
+
+                foreach (string file in files)
+                {
+                    if(!file.Contains("noimage.jpeg"))
+                        if (File.Exists(file))
+                        {
+                            File.Delete(file);
+                        }
+
+                }
+
+                ClientSocket.Instance.SendMessage(new RetrieveContactPacket(loggedUser.Name));
+            }
+            else
+            {
+                ChatForm.localDatabaseReloaded = 1;
+            }
+        }
         public void RemoveContact(String username)
         {
             String content = File.ReadAllText("./../../Resources/Contacts/Usernames.txt");

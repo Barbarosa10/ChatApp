@@ -229,7 +229,7 @@ namespace ChatApp
             Image bitmap = Image.FromStream(ms);
             Bitmap image = (Bitmap)bitmap;
             chat.LocalDatabase.UploadAvatarPhoto(image, Username);
-
+            ChatForm.localDatabaseReloaded = 1;
             //chat.AddContact(Username);
 
 
