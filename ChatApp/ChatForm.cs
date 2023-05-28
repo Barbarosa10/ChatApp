@@ -414,6 +414,7 @@ namespace ChatApp
             Console.WriteLine("contact: /" + ContactToAddTextBox.Text + "/");
             ClientSocket.Instance.SendMessage(new RetrieveContactPacket(ContactToAddTextBox.Text));
             Thread.Sleep(2000);
+            chat.AddContact(ContactToAddTextBox.Text);
             AddContactToListView();
 
 
