@@ -158,6 +158,8 @@ def client_handler(conn):
                     else:
                         add_message(sender_id, dest_id, mess)
                         logging.info(f"Sending message from {sender_id} to {dest_id}")
+                        msg = Message("SEND_MESSAGE")
+                        msg.set_sender_timestamp_message(sender_id.encode("utf-8"), str(int(time())).encode("utf-8"), mess)
                         users_list[dest_id].send(msg)
                         to_send.set_ack_msg(dest_id)
                 

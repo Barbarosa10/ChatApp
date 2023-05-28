@@ -329,15 +329,16 @@ namespace ChatApp
     class SendMessagePacket : IPacket
     {
         public string SenderID { get; set; }
-        public string DestID { get; set; }
+        public string DestID_or_Timestamp { get; set; }
         public string Message { get; set; }
         public void deserialize(byte[] data)
         {
             data = data.Skip(1).ToArray();
             int sender_len = Array.IndexOf(data, (byte)0);
             SenderID = Encoding.UTF8.GetString(data.Take(sender_len).ToArray());
-            int dest_len = Array.IndexOf(data, (byte)0, sender_len);
-            Message = Encoding.UTF8.GetString(data.Skip(sender_len + dest_len + 2).ToArray());
+            int dest_len = Array.IndexOf(data, (byte)0, sender_len+1) - sender_len;
+            DestID_or_Timestamp = Encoding.UTF8.GetString(data.Skip(sender_len+1).Take(dest_len-1).ToArray());
+            Message = Encoding.UTF8.GetString(data.Skip(sender_len + dest_len + 1).ToArray());
         }
 
         public void execute(Chat chat)
@@ -349,13 +350,13 @@ namespace ChatApp
 
         public byte[] serialize()
         {
-            byte[] data = new byte[1 + 2 + SenderID.Length + DestID.Length + Message.Length];
+            byte[] data = new byte[1 + 2 + SenderID.Length + DestID_or_Timestamp.Length + Message.Length];
             data[0] = (byte)PacketType.SEND_MESSAGE;
             Encoding.UTF8.GetBytes(SenderID).CopyTo(data, 1);
             data[SenderID.Length + 1] = 0;
-            Array.Copy(Encoding.UTF8.GetBytes(DestID), 0, data, SenderID.Length + 2, SenderID.Length);
-            data[SenderID.Length + DestID.Length + 2] = 0;
-            Array.Copy(Encoding.UTF8.GetBytes(Message), 0, data, SenderID.Length + DestID.Length + 3, Message.Length);
+            Array.Copy(Encoding.UTF8.GetBytes(DestID_or_Timestamp), 0, data, SenderID.Length + 2, SenderID.Length);
+            data[SenderID.Length + DestID_or_Timestamp.Length + 2] = 0;
+            Array.Copy(Encoding.UTF8.GetBytes(Message), 0, data, SenderID.Length + DestID_or_Timestamp.Length + 3, Message.Length);
             return data;
         }
     }

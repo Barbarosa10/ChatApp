@@ -266,7 +266,7 @@ namespace ChatApp
             //ClientSocket.Instance.SendMessage(rsa.ExportPublicKey());
             SendMessagePacket packet = new SendMessagePacket
             {
-                DestID = conversationUsername,
+                DestID_or_Timestamp = conversationUsername,
                 SenderID = logged_user.Name,
                 Message = MessageToBeSentBox.Text
             };
@@ -274,7 +274,7 @@ namespace ChatApp
             Conversation conversation = chat.GetConversation(conversationUsername);
 
             conversation.addMessage(getCurrentTimestamp(), packet.SenderID, packet.Message);
-            Console.WriteLine("Sendind message to " + packet.DestID + " : " + packet.Message);
+            Console.WriteLine("Sendind message to " + packet.DestID_or_Timestamp + " : " + packet.Message);
             AddMessagesToListView(conversationUsername);
 
             ClientSocket.Instance.SendMessage(packet);

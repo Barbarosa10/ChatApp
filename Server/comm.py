@@ -46,6 +46,9 @@ class Message:
     def set_username_and_picture(self, username: bytes, pict:bytes):
         self.raw += username + b"\x00" + pict
 
+    def set_sender_timestamp_message(self, sender:bytes, timestamp:bytes, ms:bytes):
+        self.raw += sender + b"\x00" + timestamp + b"\x00" + ms
+
     def get_username_and_picture(self):
         splitter = self.raw[1:].find(b"\x00")
         username = self.raw[1:][:splitter]
