@@ -227,7 +227,6 @@ namespace ChatApp
 
             chat.AddContact(Username);
 
-            chat.ChatForm.AddContactToListView();
 
             Console.WriteLine("Primit pachet cu poza");
             //throw new NotImplementedException();
@@ -374,7 +373,15 @@ namespace ChatApp
 
         public void execute(Chat chat)
         {
-            throw new NotImplementedException();
+            //Conversation conversation = null;
+            //conversation = chat.GetConversation(DestID_Or_Error);
+
+            //if(conversation != null)
+            //{
+            //    conversation.addMessage(message.timestamp, message.sender_id, message.content);
+            //}
+
+            //throw new NotImplementedException();
         }
 
         public byte[] serialize()
@@ -425,28 +432,32 @@ namespace ChatApp
 
         public void execute(Chat chat)
         {
-            Conversation conversation = null;
-            foreach (ServerMessage message in Messages)
-            {
-                if (message.sender_id != chat.GetLoggedUser().Name)
-                {
-                    conversation = chat.GetConversation(message.sender_id);
-                    break;
-                }
-            }
-            Messages = JsonConvert.DeserializeObject<List<ServerMessage>>(Encoding.UTF8.GetString(data));
-        }
+            Conversation conversation = chat.GetConversation(ChatForm.conversationUsername);
+            //foreach (ServerMessage message in Messages)
+            //{
+            //    if (message.sender_id != chat.GetLoggedUser().Name)
+            //    {
+            //        conversation = chat.GetConversation(message.sender_id);
+            //        break;
+            //    }
+            //}
 
+            Console.WriteLine("NR MESSAGES: " + Messages.Count);
+            //Console.WriteLine("Nr mesaje: " + Messages.Count);
             foreach (ServerMessage message in Messages)
             {
+                if(message.sender_id == "edmund")
+                {
+                    Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                }
                 Console.WriteLine("SENDER: " + message.sender_id);
 
                 if(conversation != null)
                     conversation.addMessage(message.timestamp, message.sender_id, message.content);
             }
             //ChatForm form = chat.getChatForm();
-            if (conversation != null)
-                chat.getChatForm().AddMessagesToListView(conversation.Contact.Name);
+            //if (conversation != null)
+            //    chat.getChatForm().AddMessagesToListView(conversation.Contact.Name);
 
 
 

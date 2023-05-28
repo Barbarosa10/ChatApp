@@ -21,8 +21,15 @@ namespace ChatApp
         {
             return _chatForm;
         }
-        public ChatForm ChatForm { get; set; }
-        public LocalDatabase LocalDatabase { get; set; }
+        public ChatForm ChatForm {
+            get { return _chatForm; }
+            set { _chatForm = value; }
+        }
+        public LocalDatabase LocalDatabase {
+            get { return _localDatabase; }
+            set { _localDatabase = value; }
+        }
+
 
         public  Conversation GetConversation(String username)
         {

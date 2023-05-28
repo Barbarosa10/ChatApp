@@ -29,7 +29,8 @@ namespace ChatApp
 
         public void addMessage(String timestamp, String username, String message)
         {
-            _fullMessage.Add(timestamp, new SimpleMessage() {username = username, message = message });
+            if(!_fullMessage.ContainsKey(timestamp))
+                _fullMessage.Add(timestamp, new SimpleMessage() {username = username, message = message });
         }
     }
 }

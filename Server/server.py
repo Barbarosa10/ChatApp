@@ -109,7 +109,7 @@ def get_contact_profile(username: str) -> bytes:
 def get_n_messages(user1: str, user2: str, n:int) -> []:
     messages = db.messages
     conv_id = get_conv_id(user1, user2)
-    return dumps(messages.find({"conversation_id":conv_id}, {"_id":0, "conversation_id":0}, sort=[('_id', DESCENDING)]).limit(10))
+    return dumps(messages.find({"conversation_id":conv_id}, {"_id":0, "conversation_id":0}, sort=[('_id', DESCENDING)]))
 
 def upload_photo_to_profile(username: bytes, photo:bytes):
     db.users.update_one({"username":username.decode("utf-8")}, {"$set": {"profile_picture":Binary(photo)}})

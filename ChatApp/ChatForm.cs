@@ -14,6 +14,9 @@ namespace ChatApp
 {
     public partial class ChatForm : Form
     {
+        static System.Windows.Forms.Timer conversationTimer;
+        public static String conversationUsername;
+
         List<Panel> listPanelMid = new List<Panel>();
         List<Panel> listPanelRight = new List<Panel>();
         Chat chat;
@@ -29,6 +32,10 @@ namespace ChatApp
             logged_user = user;
             chat = new Chat(_localDatabase, this, logged_user);
 
+            //Invoke(new Action(() =>
+            //{
+            //    handler.Start(chat);
+            //}));
             handler.Start(chat);
 
 
@@ -101,7 +108,19 @@ namespace ChatApp
 
             ClientSocket.Instance.SendMessage(packet);
 
-            AddMessagesToListView(contact.Name);
+            conversationUsername = contact.Name;
+            if (conversationTimer != null)
+            {
+                conversationTimer.Stop();
+                conversationTimer = null;
+            }
+            conversationTimer = new System.Windows.Forms.Timer();
+            conversationTimer.Interval = 7000; // Interval de 2 secunde
+            conversationTimer.Tick += TimerTick;
+
+            // Pornirea Timer-ului
+            conversationTimer.Start();
+            //AddMessagesToListView(contact.Name);
 
         }
         private void ConversationListView_MouseMove(object sender, MouseEventArgs e)
@@ -220,12 +239,14 @@ namespace ChatApp
             Rectangle textBounds = new Rectangle(e.Bounds.Left + ConversationWithMessagesListView.SmallImageList.ImageSize.Width, e.Bounds.Top + ConversationWithMessagesListView.SmallImageList.ImageSize.Height / 4, 92, e.Bounds.Height);
             TextRenderer.DrawText(e.Graphics, dateString + " : ", ConversationWithMessagesListView.Font, textBounds, Color.Gray, TextFormatFlags.Left);
 
-            textBounds = new Rectangle(e.Bounds.Left + ConversationWithMessagesListView.SmallImageList.ImageSize.Width + 95, e.Bounds.Top + ConversationWithMessagesListView.SmallImageList.ImageSize.Height / 4, e.Bounds.Width - ConversationWithMessagesListView.SmallImageList.ImageSize.Width, e.Bounds.Height);
+            textBounds = new Rectangle(e.Bounds.Left + ConversationWithMessagesListView.SmallImageList.ImageSize.Width + 95, e.Bounds.Top + ConversationWithMessagesListView.SmallImageList.ImageSize.Height / 4, ConversationWithMessagesListView.Width - ConversationWithMessagesListView.SmallImageList.ImageSize.Width, e.Bounds.Height);
             TextRenderer.DrawText(e.Graphics, message, ConversationWithMessagesListView.Font, textBounds, Color.White, TextFormatFlags.Left);
         }
 
         private void LogoutButton_Click(object sender, EventArgs e)
         {
+            if(conversationTimer != null)
+                conversationTimer.Stop();
             handler.Stop();
             ClientSocket.Instance.CloseSocket();
             LogInForm loginForm = new LogInForm();
@@ -249,7 +270,7 @@ namespace ChatApp
                 SenderID = logged_user.Name,
                 Message = MessageToBeSentBox.Text
             };
-            Console.WriteLine("Sendind message to " + packet.SenderID + " : " + packet.Message);
+            Console.WriteLine("Sendind message to " + packet.DestID + " : " + packet.Message);
             ClientSocket.Instance.SendMessage(packet);
 
         }
@@ -374,6 +395,9 @@ namespace ChatApp
 
             Console.WriteLine("contact: /" + ContactToAddTextBox.Text + "/");
             ClientSocket.Instance.SendMessage(new RetrieveContactPacket(ContactToAddTextBox.Text));
+            Thread.Sleep(2000);
+            AddContactToListView();
+
 
         }
 
@@ -405,6 +429,23 @@ namespace ChatApp
         private void DeleteContactButton_Click(object sender, EventArgs e)
         {
             chat.RemoveContact(ContactLabel.Text);
+
+            ProfileButton.BackColor = Color.Black;
+            ProfileButton.ForeColor = Color.Silver;
+            ContactsButton.BackColor = Color.DarkGray;
+            ContactsButton.ForeColor = Color.Black;
+            ConversationButton.BackColor = Color.Black;
+            ConversationButton.ForeColor = Color.Silver;
+            SettingsButton.BackColor = Color.Black;
+            SettingsButton.ForeColor = Color.Silver;
+
+            EnableDisableRightPanel(false, true, false, false, false, false, false, false);
+            EnableDisableLeftPanel(false, true, false, false);
+
+            ContactsListView.View = View.Details;
+
+            ContactsListView.ForeColor = Color.White;
+
             AddContactToListView();
         }
 
@@ -450,7 +491,30 @@ namespace ChatApp
 
         private void DeleteConversationButton_Click(object sender, EventArgs e)
         {
+            if(conversationTimer != null)
+            {
+                conversationTimer.Stop();
+                conversationTimer = null;
+            }
+
             chat.RemoveConversation(ConversationTopLabel.Text);
+
+            ProfileButton.BackColor = Color.Black;
+            ProfileButton.ForeColor = Color.Silver;
+            ContactsButton.BackColor = Color.Black;
+            ContactsButton.ForeColor = Color.Silver;
+            ConversationButton.BackColor = Color.DarkGray;
+            ConversationButton.ForeColor = Color.Black;
+            SettingsButton.BackColor = Color.Black;
+            SettingsButton.ForeColor = Color.Silver;
+
+            EnableDisableRightPanel(false, false, false, false, false, false, false, true);
+            EnableDisableLeftPanel(false, false, true, false);
+
+            ConversationsListView.View = View.Details;
+
+            ConversationsListView.ForeColor = Color.White;
+
             AddConversationsToListView();
         }
 
@@ -469,7 +533,10 @@ namespace ChatApp
             if (conversation.getMessage() != null)
             {
                 int i = 0;
-                foreach (String timestamp in conversation.getMessage().Keys)
+
+                SortedDictionary<String, Conversation.SimpleMessage> sortedDictionary = new SortedDictionary<String, Conversation.SimpleMessage>(conversation.getMessage());
+                Console.WriteLine("CHEI: " + conversation.getMessage().Count);
+                foreach (String timestamp in sortedDictionary.Keys)
                 {
                     if(conversation.getMessage()[timestamp].username == logged_user.Name)
                         image.Images.Add(logged_user.Image);
@@ -491,10 +558,28 @@ namespace ChatApp
 
 
                 ConversationWithMessagesListView.SmallImageList = image;
+
+                if (ConversationWithMessagesListView.Items.Count > 0)
+                {
+                    ConversationWithMessagesListView.TopItem = ConversationWithMessagesListView.Items[ConversationWithMessagesListView.Items.Count - 1];
+                }
             }
 
 
         }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            GetNMessagesPacket packet = new GetNMessagesPacket();
+            packet.User1 = logged_user.Name;
+            packet.User2 = conversationUsername;
+
+            ClientSocket.Instance.SendMessage(packet);
+
+            AddMessagesToListView(conversationUsername);
+        }
+
+
         private void ConversationsListView_SelectedIndexChanged(object sender, EventArgs e)
         {
 
