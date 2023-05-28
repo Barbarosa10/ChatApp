@@ -30,7 +30,6 @@ namespace ChatApp
             set { _localDatabase = value; }
         }
 
-
         public  Conversation GetConversation(String username)
         {
             foreach(Conversation conversation in _conversations)

@@ -345,6 +345,20 @@ namespace ChatApp
         {
             Console.WriteLine("Mesaj primit: " + Message);
 
+            Conversation conversation = chat.GetConversation(SenderID);
+
+            if (conversation != null)
+                conversation.addMessage(DestID_or_Timestamp, SenderID, Message);
+            else
+            {
+                Contact sender = chat.Contact(SenderID);
+                if(sender == null)
+                {
+                    ClientSocket.Instance.SendMessage(new RetrieveContactPacket(SenderID));
+                }
+                chat.AddConversation(SenderID);
+            }
+
             //throw new NotImplementedException();
         }
 

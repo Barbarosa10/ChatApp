@@ -13,6 +13,8 @@ namespace ChatApp
             public String username;
             public String message;
         }
+        private int state = 0;
+        private int size = 0;
         private Contact _contact;
         private Dictionary<String, SimpleMessage> _fullMessage = new Dictionary<String, SimpleMessage>();
 
@@ -22,6 +24,17 @@ namespace ChatApp
         {
             return _fullMessage;
         }
+        public int State {
+            get { return state; }
+            set { state = value; }
+        }
+
+        public int Size
+        {
+            get { return size; }
+            set { size = value; }
+        }
+
         public Dictionary<String, SimpleMessage> Message { get; set; }
         public Conversation()
         {
